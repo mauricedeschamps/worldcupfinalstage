@@ -102,7 +102,7 @@
             text-decoration: underline;
         }
 
-        /* ----- Tournament Bracket ----- */
+        /* ----- トーナメント表: シンプル＆大判フラグ ----- */
         #tournament {
             display: flex;
             overflow-x: auto;
@@ -110,8 +110,7 @@
             gap: 0.8rem;
             flex: 1;
             align-items: center;
-            background: rgba(0, 0, 0, 0.15);
-            justify-content: center;
+            background: rgba(0, 0, 0, 0.12);
         }
         body.light #tournament {
             background: rgba(0, 0, 0, 0.02);
@@ -120,12 +119,12 @@
         .round-column {
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
-            flex-shrink: 0;
+            gap: 0.7rem;
+            flex-shrink: 0;  /* 縮まない */
             background: rgba(255, 255, 255, 0.04);
             border-radius: 8px;
             padding: 0.5rem 0.3rem;
-            min-width: 70px;
+            min-width: 76px;  /* フラグが大きくても入る幅 */
             align-items: center;
         }
         body.light .round-column {
@@ -137,7 +136,7 @@
             text-transform: uppercase;
             opacity: 0.6;
             letter-spacing: 0.5px;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
             white-space: nowrap;
         }
 
@@ -149,7 +148,7 @@
             flex-direction: column;
             gap: 0.1rem;
             width: 100%;
-            min-width: 55px;
+            min-width: 60px;
             border-left: 3px solid transparent;
             transition: border-color 0.2s;
         }
@@ -161,16 +160,15 @@
             border-left-color: #ffd700;
         }
 
-        /* ----- 国旗サイズを大きく（スマホ対応） ----- */
+        /* ----- 国旗を大きく（スマホでタップしやすく） ----- */
         .team {
-            padding: 0.1rem 0.2rem;
+            padding: 0.15rem 0.2rem;
             border-radius: 4px;
             cursor: default;
-            font-size: 2rem;
-            /* ← 大きく */
+            font-size: 2.4rem;   /* ← 大きく */
             text-align: center;
-            line-height: 2.4rem;
-            min-height: 2.4rem;
+            line-height: 2.8rem;
+            min-height: 2.8rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -195,18 +193,19 @@
         }
         .team.tbd {
             opacity: 0.3;
-            font-size: 1rem;
+            font-size: 1.2rem;
             color: #aaa;
         }
 
         .match-info {
-            font-size: 0.45rem;
+            font-size: 0.4rem;
             text-align: center;
             opacity: 0.4;
             white-space: nowrap;
             margin-top: 0.05rem;
         }
 
+        /* 中央（決勝・3位決定戦） */
         .center-divider {
             display: flex;
             flex-direction: column;
@@ -214,32 +213,25 @@
             gap: 0.8rem;
             padding: 0 0.3rem;
         }
-        .center-divider .final-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            opacity: 0.6;
-            letter-spacing: 1px;
-        }
 
-        /* スマホ向け調整 */
+        /* スマホ用調整 */
         @media (max-width: 700px) {
             .team {
-                font-size: 1.6rem;
-                line-height: 2rem;
-                min-height: 2rem;
+                font-size: 2rem;
+                line-height: 2.4rem;
+                min-height: 2.4rem;
             }
             .round-column {
-                min-width: 55px;
+                min-width: 60px;
                 padding: 0.3rem 0.15rem;
-                gap: 0.4rem;
+                gap: 0.5rem;
             }
             .match {
-                min-width: 45px;
+                min-width: 48px;
                 padding: 0.15rem 0.1rem;
             }
             .match-info {
-                font-size: 0.4rem;
+                font-size: 0.35rem;
             }
             .round-column .round-label {
                 font-size: 0.5rem;
@@ -265,7 +257,7 @@
 
     <script>
         // ================================================================
-        // 1. TEAM DATA
+        // 1. チームデータ（国旗のみ）
         // ================================================================
         const TEAMS = [
             { name: 'South Africa', flag: '🇿🇦' },
@@ -304,7 +296,7 @@
         function getTeam(name) { return TEAMS.find(t => t.name === name); }
 
         // ================================================================
-        // 2. TOURNAMENT DATA (same as before)
+        // 2. トーナメントデータ（実際の組み合わせ）
         // ================================================================
         const R32_DATA = [
             { home: 'South Africa', away: 'Canada', date: 'Jun 28, 3:00 PM', stadium: 'SoFi Stadium, Los Angeles' },
@@ -362,7 +354,7 @@
         const FINAL = { date: 'Jul 19, 3:00 PM', stadium: 'MetLife Stadium, East Rutherford' };
 
         // ================================================================
-        // 3. BUILD TOURNAMENT STATE
+        // 3. トーナメント状態の構築
         // ================================================================
         let tournament = null;
 
@@ -443,7 +435,7 @@
         }
 
         // ================================================================
-        // 4. SAVE / LOAD
+        // 4. 保存／復元（localStorage）
         // ================================================================
         function saveState() {
             try { localStorage.setItem('wc2026_bracket', JSON.stringify(tournament)); } catch (e) { console.warn('Save failed', e); }
@@ -474,7 +466,7 @@
         }
 
         // ================================================================
-        // 5. RENDER – 左右対称のトーナメント表
+        // 5. レンダリング（左右の山を明確に分離）
         // ================================================================
         function renderTournament() {
             const container = document.getElementById('tournament');
@@ -487,19 +479,19 @@
             const third = tournament[4].matches[0];
             const final = tournament[5].matches[0];
 
-            // 左半分 (インデックス0〜7)
+            // ----- 左の山（インデックス 0〜7） -----
             const leftR32 = r32.slice(0, 8);
             const leftR16 = r16.slice(0, 4);
             const leftQF = qf.slice(0, 2);
             const leftSF = sf.slice(0, 1);
 
-            // 右半分 (インデックス8〜15)
+            // ----- 右の山（インデックス 8〜15） -----
             const rightR32 = r32.slice(8, 16);
             const rightR16 = r16.slice(4, 8);
             const rightQF = qf.slice(2, 4);
             const rightSF = sf.slice(1, 2);
 
-            // 列生成ヘルパー
+            // 列生成ヘルパー（マッチ配列を受け取って列DOMを返す）
             function buildColumn(label, matches, extraStyle = '') {
                 const col = document.createElement('div');
                 col.className = 'round-column';
@@ -508,6 +500,7 @@
                 lbl.className = 'round-label';
                 lbl.textContent = label;
                 col.appendChild(lbl);
+
                 matches.forEach(match => {
                     const div = document.createElement('div');
                     div.className = 'match';
@@ -555,13 +548,13 @@
                 return col;
             }
 
-            // ---- 左側: 外側 → 内側 (R32 → R16 → QF → SF) ----
+            // ---- 1. 左側の山（外側 → 内側） ----
             container.appendChild(buildColumn('R32', leftR32));
             container.appendChild(buildColumn('R16', leftR16));
             container.appendChild(buildColumn('QF', leftQF));
             container.appendChild(buildColumn('SF', leftSF));
 
-            // ---- 中央: Final（上）と 3rd（下） ----
+            // ---- 2. 中央（Final と 3rd） ----
             const center = document.createElement('div');
             center.className = 'center-divider';
 
@@ -585,7 +578,7 @@
 
             container.appendChild(center);
 
-            // ---- 右側: 内側 → 外側 (SF → QF → R16 → R32) ----
+            // ---- 3. 右側の山（内側 → 外側） ----
             container.appendChild(buildColumn('SF', rightSF));
             container.appendChild(buildColumn('QF', rightQF));
             container.appendChild(buildColumn('R16', rightR16));
@@ -593,7 +586,7 @@
         }
 
         // ================================================================
-        // 6. SELECT WINNER & PROPAGATE
+        // 6. 勝者選択と伝播
         // ================================================================
         function selectWinner(roundIdx, matchIdx, side) {
             const match = tournament[roundIdx].matches[matchIdx];
@@ -651,7 +644,7 @@
         }
 
         // ================================================================
-        // 7. THEME TOGGLE
+        // 7. テーマ切り替え
         // ================================================================
         document.getElementById('theme-toggle').addEventListener('click', function() {
             document.body.classList.toggle('light');
@@ -659,7 +652,7 @@
         });
 
         // ================================================================
-        // 8. INIT
+        // 8. 初期化
         // ================================================================
         const saved = loadState();
         tournament = saved || buildTournament();
