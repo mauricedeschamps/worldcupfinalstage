@@ -253,10 +253,10 @@
 
     <script>
         // ================================================================
-        // 1. チームデータ（ユーザー指定の配列）
+        // 1. チームデータ（ご指定の順序そのまま）
         // ================================================================
         const TEAMS = [
-            // 左の山（16チーム）
+            // ---- 左の山（16チーム） ----
             { name: 'Germany', flag: '🇩🇪' },
             { name: 'Paraguay', flag: '🇵🇾' },
             { name: 'France', flag: '🇫🇷' },
@@ -268,12 +268,13 @@
             { name: 'Portugal', flag: '🇵🇹' },
             { name: 'Croatia', flag: '🇭🇷' },
             { name: 'Spain', flag: '🇪🇸' },
-            { name: 'Austria', flag: '🇦🇹' },
+            { name: 'Austria', flag: '🇦🇹' }, // ← スペインの次はオーストリア
             { name: 'USA', flag: '🇺🇸' },
-            { name: 'Bosnia and Herzegovina', flag: '🇧🇦' },
+            { name: 'Bosnia and Herzegovina', flag: '🇧🇦' }, // ← アメリカの次はボスニア
             { name: 'Belgium', flag: '🇧🇪' },
             { name: 'Senegal', flag: '🇸🇳' },
-            // 右の山（16チーム）
+
+            // ---- 右の山（16チーム） ----
             { name: 'Brazil', flag: '🇧🇷' },
             { name: 'Japan', flag: '🇯🇵' },
             { name: 'Ivory Coast', flag: '🇨🇮' },
@@ -287,7 +288,7 @@
             { name: 'Australia', flag: '🇦🇺' },
             { name: 'Egypt', flag: '🇪🇬' },
             { name: 'Switzerland', flag: '🇨🇭' },
-            { name: 'Algeria', flag: '🇩🇿' },
+            { name: 'Algeria', flag: '🇩🇿' }, // ← スイスの次はアルジェリア
             { name: 'Colombia', flag: '🇨🇴' },
             { name: 'Ghana', flag: '🇬🇭' }
         ];
@@ -297,12 +298,12 @@
         }
 
         // ================================================================
-        // 2. ラウンド32 対戦カード（左・右それぞれ隣り合わせ）
+        // 2. ラウンド32 対戦カード（隣り合わせ）
         // ================================================================
         const LEFT_TEAMS = TEAMS.slice(0, 16);
         const RIGHT_TEAMS = TEAMS.slice(16, 32);
 
-        // 左の山（8試合）：0-1, 2-3, 4-5, 6-7, 8-9, 10-11, 12-13, 14-15
+        // 左の山（8試合）
         const LEFT_R32 = [];
         for (let i = 0; i < 16; i += 2) {
             LEFT_R32.push({
@@ -323,10 +324,9 @@
         const R32_DATA = LEFT_R32.concat(RIGHT_R32);
 
         // ================================================================
-        // 3. ラウンド16以降の自然なブラケット（隣り合わせ）
+        // 3. ラウンド16以降のブラケット（自然な隣り合わせ）
         // ================================================================
         // R32インデックス: 左0-7, 右8-15
-        // R16: 左4試合 (0-3), 右4試合 (4-7)
         const R16_SOURCES = [
             [0, 1],
             [2, 3],
@@ -348,7 +348,6 @@
             { date: 'Jul 7, 4:00 PM', stadium: 'Estadio Azteca, Mexico City' }
         ];
 
-        // QF: 左2試合 (0-1), 右2試合 (2-3)
         const QF_SOURCES = [
             [0, 1],
             [2, 3],
@@ -362,7 +361,6 @@
             { date: 'Jul 11, 9:00 PM', stadium: 'NRG Stadium, Houston' }
         ];
 
-        // SF: 左1試合 (0), 右1試合 (1)
         const SF_SOURCES = [
             [0, 1],
             [2, 3]
@@ -398,7 +396,7 @@
                     home: getTeam(d.home),
                     away: getTeam(d.away),
                     winner: null,
-                    date: `Jun ${28 + Math.floor(i / 2)}`, // 簡易日付
+                    date: `Jun ${28 + Math.floor(i / 2)}`,
                     stadium: 'TBD',
                     roundIdx: 0,
                     matchIdx: i
