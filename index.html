@@ -31,22 +31,22 @@
         /* ----- Header & Footer ----- */
         header,
         footer {
-            padding: 0.8rem 1rem;
+            padding: 0.6rem 1rem;
             background: #16213e;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 0.5rem;
+            flex-shrink: 0;
         }
         body.light header,
         body.light footer {
             background: #ddd;
         }
         header h1 {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
         }
         .header-actions {
             display: flex;
@@ -91,7 +91,7 @@
             margin-top: auto;
             justify-content: center;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         footer a {
             color: #4fc3f7;
@@ -104,77 +104,80 @@
             text-decoration: underline;
         }
 
-        /* ----- Tournament Bracket (horizontal scroll) ----- */
+        /* ----- Tournament Bracket (horizontal, left & right halves) ----- */
         #tournament {
             display: flex;
             overflow-x: auto;
             padding: 1rem 0.5rem;
-            gap: 0.6rem;
+            gap: 0.4rem;
             flex: 1;
-            align-items: flex-start;
-            background: rgba(0, 0, 0, 0.2);
+            align-items: center;
+            background: rgba(0, 0, 0, 0.15);
+            justify-content: center;
         }
         body.light #tournament {
             background: rgba(0, 0, 0, 0.02);
         }
 
-        /* Each round is a column */
-        .round {
-            flex: 0 0 auto;
-            min-width: 100px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 8px;
-            padding: 0.5rem 0.3rem;
+        /* Each column (round) */
+        .round-column {
             display: flex;
             flex-direction: column;
-            gap: 0.4rem;
+            gap: 0.3rem;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 6px;
+            padding: 0.4rem 0.2rem;
+            min-width: 60px;
+            align-items: center;
         }
-        body.light .round {
+        body.light .round-column {
             background: rgba(0, 0, 0, 0.03);
         }
-        .round h2 {
-            text-align: center;
-            font-size: 0.65rem;
+        .round-column .round-label {
+            font-size: 0.55rem;
             font-weight: 600;
-            margin: 0 0 0.3rem 0;
-            letter-spacing: 0.5px;
             text-transform: uppercase;
-            opacity: 0.7;
+            opacity: 0.6;
+            letter-spacing: 0.3px;
+            margin-bottom: 0.2rem;
             white-space: nowrap;
         }
 
-        /* Each match card */
+        /* Individual match card (vertical stacking) */
         .match {
             background: rgba(255, 255, 255, 0.06);
             border-radius: 4px;
-            padding: 0.3rem 0.2rem;
+            padding: 0.15rem 0.1rem;
             display: flex;
             flex-direction: column;
-            gap: 0.1rem;
-            transition: background 0.2s;
-            border-left: 3px solid transparent;
+            gap: 0.05rem;
+            width: 100%;
+            min-width: 44px;
+            border-left: 2px solid transparent;
+            transition: border-color 0.2s;
         }
         body.light .match {
             background: #ffffff;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
         }
         .match.has-winner {
             border-left-color: #ffd700;
         }
 
-        /* Team rows - only flag */
+        /* Team rows – flag only */
         .team {
-            padding: 0.1rem 0.2rem;
+            padding: 0.05rem 0.1rem;
             border-radius: 3px;
             cursor: default;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             text-align: center;
             line-height: 1.6rem;
-            transition: background 0.15s, opacity 0.2s;
-            min-height: 1.8rem;
+            min-height: 1.6rem;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background 0.15s, opacity 0.2s, transform 0.15s;
         }
         .team:not(.winner):not(.loser):hover {
             background: rgba(255, 255, 255, 0.15);
@@ -186,7 +189,7 @@
         .team.winner {
             background: #ffd700;
             border-radius: 4px;
-            box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+            box-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
             transform: scale(1.05);
         }
         .team.loser {
@@ -195,27 +198,43 @@
         }
         .team.tbd {
             opacity: 0.3;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #aaa;
         }
 
-        /* Match info (date/stadium) - small, optional */
+        /* Match info (tiny) */
         .match-info {
-            font-size: 0.45rem;
+            font-size: 0.4rem;
             text-align: center;
-            opacity: 0.4;
-            margin-top: 0.1rem;
-            letter-spacing: 0.2px;
+            opacity: 0.35;
             white-space: nowrap;
+            margin-top: 0.05rem;
+        }
+
+        /* Spacer / divider in the middle */
+        .center-divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 0.3rem;
+        }
+        .center-divider .final-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            opacity: 0.6;
+            letter-spacing: 1px;
         }
 
         /* Responsive */
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
+            .team { font-size: 1rem; line-height: 1.3rem; min-height: 1.3rem; }
+            .round-column { min-width: 44px; padding: 0.2rem 0.1rem; }
+            .match { min-width: 34px; padding: 0.1rem 0.05rem; }
+            .match-info { font-size: 0.35rem; }
+            .round-column .round-label { font-size: 0.45rem; }
             header h1 { font-size: 1rem; }
-            .round { min-width: 70px; padding: 0.3rem 0.2rem; }
-            .team { font-size: 1.2rem; line-height: 1.4rem; min-height: 1.5rem; }
-            .match-info { font-size: 0.4rem; }
-            .header-actions button { font-size: 0.7rem; padding: 0.2rem 0.6rem; }
         }
     </style>
 </head>
@@ -237,7 +256,7 @@
 
     <script>
         // ================================================================
-        // 1. TEAM DATA (with flags only – we'll use the emoji)
+        // 1. TEAM DATA (flags only)
         // ================================================================
         const TEAMS = [
             { name: 'South Africa', flag: '🇿🇦' },
@@ -279,7 +298,7 @@
         }
 
         // ================================================================
-        // 2. ROUND OF 32 – 16 matches (Match 73–88)
+        // 2. TOURNAMENT DATA (same as before, with sources)
         // ================================================================
         const R32_DATA = [
             { home: 'South Africa', away: 'Canada', date: 'Jun 28, 3:00 PM', stadium: 'SoFi Stadium, Los Angeles' },
@@ -300,20 +319,10 @@
             { home: 'Australia', away: 'Egypt', date: 'Jul 3, 2:00 PM', stadium: 'AT&T Stadium, Arlington' }
         ];
 
-        // ================================================================
-        // 3. ROUND OF 16 – 8 matches (Match 89–96)
-        // ================================================================
         const R16_SOURCES = [
-            [0, 2], // 89: W73 vs W75
-            [1, 4], // 90: W74 vs W77
-            [3, 5], // 91: W76 vs W78
-            [6, 7], // 92: W79 vs W80
-            [10, 11], // 93: W83 vs W84
-            [8, 9], // 94: W81 vs W82
-            [13, 15], // 95: W86 vs W88
-            [12, 14] // 96: W85 vs W87
+            [0, 2], [1, 4], [3, 5], [6, 7],
+            [10, 11], [8, 9], [13, 15], [12, 14]
         ];
-
         const R16_SCHEDULE = [
             { date: 'Jul 4, 1:00 PM', stadium: 'Gillette Stadium, Foxborough' },
             { date: 'Jul 4, 5:00 PM', stadium: 'MetLife Stadium, East Rutherford' },
@@ -325,16 +334,9 @@
             { date: 'Jul 7, 4:00 PM', stadium: 'Estadio Azteca, Mexico City' }
         ];
 
-        // ================================================================
-        // 4. QUARTER-FINALS – 4 matches (Match 97–100)
-        // ================================================================
         const QF_SOURCES = [
-            [0, 1], // 97: W89 vs W90
-            [4, 5], // 98: W93 vs W94
-            [2, 3], // 99: W91 vs W92
-            [6, 7] // 100: W95 vs W96
+            [0, 1], [4, 5], [2, 3], [6, 7]
         ];
-
         const QF_SCHEDULE = [
             { date: 'Jul 9, 4:00 PM', stadium: 'Gillette Stadium, Foxborough' },
             { date: 'Jul 10, 3:00 PM', stadium: 'SoFi Stadium, Los Angeles' },
@@ -342,32 +344,23 @@
             { date: 'Jul 11, 9:00 PM', stadium: 'NRG Stadium, Houston' }
         ];
 
-        // ================================================================
-        // 5. SEMI-FINALS – 2 matches (Match 101–102)
-        // ================================================================
         const SF_SOURCES = [
-            [0, 1], // 101: W97 vs W98
-            [2, 3] // 102: W99 vs W100
+            [0, 1], [2, 3]
         ];
-
         const SF_SCHEDULE = [
             { date: 'Jul 14, 3:00 PM', stadium: 'AT&T Stadium, Arlington' },
             { date: 'Jul 15, 3:00 PM', stadium: 'Mercedes-Benz Stadium, Atlanta' }
         ];
 
-        // ================================================================
-        // 6. THIRD PLACE & FINAL
-        // ================================================================
         const THIRD_PLACE = { date: 'Jul 18, 5:00 PM', stadium: 'Hard Rock Stadium, Miami Gardens' };
         const FINAL = { date: 'Jul 19, 3:00 PM', stadium: 'MetLife Stadium, East Rutherford' };
 
         // ================================================================
-        // 7. BUILD TOURNAMENT STATE
+        // 3. BUILD TOURNAMENT STATE (same structure)
         // ================================================================
         let tournament = null;
 
         function buildTournament() {
-            // rounds: 0=R32, 1=R16, 2=QF, 3=SF, 4=Third, 5=Final
             const rounds = [
                 { name: 'R32', matches: [] },
                 { name: 'R16', matches: [] },
@@ -377,7 +370,6 @@
                 { name: 'Final', matches: [] }
             ];
 
-            // -- Round of 32 (16 matches) --
             for (let i = 0; i < 16; i++) {
                 const d = R32_DATA[i];
                 rounds[0].matches.push({
@@ -391,8 +383,6 @@
                     matchIdx: i
                 });
             }
-
-            // -- Round of 16 (8 matches) --
             for (let i = 0; i < 8; i++) {
                 rounds[1].matches.push({
                     id: `r16_${i}`,
@@ -406,8 +396,6 @@
                     sources: R16_SOURCES[i]
                 });
             }
-
-            // -- Quarter-finals (4 matches) --
             for (let i = 0; i < 4; i++) {
                 rounds[2].matches.push({
                     id: `qf_${i}`,
@@ -421,8 +409,6 @@
                     sources: QF_SOURCES[i]
                 });
             }
-
-            // -- Semi-finals (2 matches) --
             for (let i = 0; i < 2; i++) {
                 rounds[3].matches.push({
                     id: `sf_${i}`,
@@ -436,8 +422,6 @@
                     sources: SF_SOURCES[i]
                 });
             }
-
-            // -- Third Place (1 match) --
             rounds[4].matches.push({
                 id: 'third',
                 home: null,
@@ -449,8 +433,6 @@
                 matchIdx: 0,
                 sources: null
             });
-
-            // -- Final (1 match) --
             rounds[5].matches.push({
                 id: 'final',
                 home: null,
@@ -467,19 +449,13 @@
         }
 
         // ================================================================
-        // 8. SAVE / LOAD state (localStorage)
+        // 4. SAVE / LOAD (localStorage)
         // ================================================================
         function saveState() {
             try {
-                // We need to store only plain data; we'll remove circular refs
-                const data = JSON.stringify(tournament, (key, value) => {
-                    // Skip functions, keep objects
-                    return value;
-                });
+                const data = JSON.stringify(tournament);
                 localStorage.setItem('wc2026_bracket', data);
-            } catch (e) {
-                console.warn('Save failed', e);
-            }
+            } catch (e) { console.warn('Save failed', e); }
         }
 
         function loadState() {
@@ -487,25 +463,16 @@
             if (!stored) return null;
             try {
                 const parsed = JSON.parse(stored);
-                // Now we need to rebuild team references (home, away, winner) from TEAMS array
-                // We'll traverse and replace team objects by name
-                const rounds = parsed;
-                for (let r = 0; r < rounds.length; r++) {
-                    const round = rounds[r];
-                    for (let m = 0; m < round.matches.length; m++) {
-                        const match = round.matches[m];
-                        if (match.home && match.home.name) {
-                            match.home = getTeam(match.home.name);
-                        }
-                        if (match.away && match.away.name) {
-                            match.away = getTeam(match.away.name);
-                        }
-                        if (match.winner && match.winner.name) {
-                            match.winner = getTeam(match.winner.name);
-                        }
+                // Rebind team objects
+                for (let r = 0; r < parsed.length; r++) {
+                    for (let m = 0; m < parsed[r].matches.length; m++) {
+                        const match = parsed[r].matches[m];
+                        if (match.home && match.home.name) match.home = getTeam(match.home.name);
+                        if (match.away && match.away.name) match.away = getTeam(match.away.name);
+                        if (match.winner && match.winner.name) match.winner = getTeam(match.winner.name);
                     }
                 }
-                return rounds;
+                return parsed;
             } catch (e) {
                 console.warn('Load failed', e);
                 return null;
@@ -520,31 +487,27 @@
         }
 
         // ================================================================
-        // 9. RENDER
+        // 5. RENDER – Left/Right Halves + Center
         // ================================================================
         function renderTournament() {
             const container = document.getElementById('tournament');
             container.innerHTML = '';
 
-            // We'll show rounds in order: R32, R16, QF, SF, 3rd, Final
-            // But we want left and right halves? Actually we display all rounds sequentially.
-            // For a cleaner look, we can separate into two halves, but for simplicity we keep horizontal.
-            // However, we can add a visual divider after SF? Not needed.
+            // Helper to build a column for a specific set of matches
+            function buildColumn(label, matches) {
+                const col = document.createElement('div');
+                col.className = 'round-column';
+                const labelEl = document.createElement('div');
+                labelEl.className = 'round-label';
+                labelEl.textContent = label;
+                col.appendChild(labelEl);
 
-            tournament.forEach((round, rIdx) => {
-                const roundDiv = document.createElement('div');
-                roundDiv.className = 'round';
-
-                const title = document.createElement('h2');
-                title.textContent = round.name;
-                roundDiv.appendChild(title);
-
-                round.matches.forEach((match, mIdx) => {
+                matches.forEach((match, idx) => {
                     const matchDiv = document.createElement('div');
                     matchDiv.className = 'match';
                     if (match.winner) matchDiv.classList.add('has-winner');
 
-                    // Home team (flag only)
+                    // Home
                     const homeDiv = document.createElement('div');
                     homeDiv.className = 'team home';
                     if (match.home) {
@@ -553,14 +516,14 @@
                         else if (match.winner) homeDiv.classList.add('loser');
                         if (!match.winner && match.home && match.away) {
                             homeDiv.style.cursor = 'pointer';
-                            homeDiv.addEventListener('click', () => selectWinner(rIdx, mIdx, 'home'));
+                            homeDiv.addEventListener('click', () => selectWinner(match.roundIdx, match.matchIdx, 'home'));
                         }
                     } else {
                         homeDiv.textContent = '?';
                         homeDiv.classList.add('tbd');
                     }
 
-                    // Away team (flag only)
+                    // Away
                     const awayDiv = document.createElement('div');
                     awayDiv.className = 'team away';
                     if (match.away) {
@@ -569,14 +532,14 @@
                         else if (match.winner) awayDiv.classList.add('loser');
                         if (!match.winner && match.home && match.away) {
                             awayDiv.style.cursor = 'pointer';
-                            awayDiv.addEventListener('click', () => selectWinner(rIdx, mIdx, 'away'));
+                            awayDiv.addEventListener('click', () => selectWinner(match.roundIdx, match.matchIdx, 'away'));
                         }
                     } else {
                         awayDiv.textContent = '?';
                         awayDiv.classList.add('tbd');
                     }
 
-                    // Info line (date & stadium) – small
+                    // Info
                     const infoDiv = document.createElement('div');
                     infoDiv.className = 'match-info';
                     infoDiv.textContent = `${match.date} | ${match.stadium}`;
@@ -584,18 +547,90 @@
                     matchDiv.appendChild(homeDiv);
                     matchDiv.appendChild(awayDiv);
                     matchDiv.appendChild(infoDiv);
-                    roundDiv.appendChild(matchDiv);
+                    col.appendChild(matchDiv);
                 });
 
-                container.appendChild(roundDiv);
+                return col;
+            }
+
+            // Split matches per round into left/right halves
+            const r32 = tournament[0].matches;
+            const r16 = tournament[1].matches;
+            const qf  = tournament[2].matches;
+            const sf  = tournament[3].matches;
+            const third = tournament[4].matches[0];
+            const final = tournament[5].matches[0];
+
+            // Left half indices: R32 0-7, R16 0-3, QF 0-1, SF 0
+            const leftR32 = r32.slice(0, 8);
+            const leftR16 = r16.slice(0, 4);
+            const leftQF  = qf.slice(0, 2);
+            const leftSF  = sf.slice(0, 1);
+
+            // Right half indices: R32 8-15, R16 4-7, QF 2-3, SF 1
+            const rightR32 = r32.slice(8, 16);
+            const rightR16 = r16.slice(4, 8);
+            const rightQF  = qf.slice(2, 4);
+            const rightSF  = sf.slice(1, 2);
+
+            // --- Build left side (from left to center) ---
+            // Order: R32 (leftmost) → R16 → QF → SF (closer to center)
+            const leftCols = [
+                { label: 'R32', matches: leftR32 },
+                { label: 'R16', matches: leftR16 },
+                { label: 'QF', matches: leftQF },
+                { label: 'SF', matches: leftSF }
+            ];
+            leftCols.forEach(colData => {
+                const col = buildColumn(colData.label, colData.matches);
+                container.appendChild(col);
             });
 
-            // After render, save state (if not already saved on each selection)
-            // But we save after each selection, so this is just extra.
+            // --- Center: Final (top) and Third Place (bottom) ---
+            const centerDiv = document.createElement('div');
+            centerDiv.className = 'center-divider';
+
+            // Final
+            const finalCol = buildColumn('Final', [final]);
+            finalCol.style.background = 'rgba(255,215,0,0.08)';
+            finalCol.style.border = '1px solid rgba(255,215,0,0.3)';
+            finalCol.style.borderRadius = '8px';
+            finalCol.style.padding = '0.4rem 0.3rem';
+            centerDiv.appendChild(finalCol);
+
+            // Spacer
+            const spacer = document.createElement('div');
+            spacer.style.height = '0.8rem';
+            centerDiv.appendChild(spacer);
+
+            // Third Place
+            const thirdCol = buildColumn('3rd', [third]);
+            thirdCol.style.background = 'rgba(192,192,192,0.06)';
+            thirdCol.style.border = '1px solid rgba(192,192,192,0.2)';
+            thirdCol.style.borderRadius = '8px';
+            thirdCol.style.padding = '0.4rem 0.3rem';
+            centerDiv.appendChild(thirdCol);
+
+            container.appendChild(centerDiv);
+
+            // --- Build right side (from center to right) ---
+            // Order: SF → QF → R16 → R32 (rightmost)
+            const rightCols = [
+                { label: 'SF', matches: rightSF },
+                { label: 'QF', matches: rightQF },
+                { label: 'R16', matches: rightR16 },
+                { label: 'R32', matches: rightR32 }
+            ];
+            rightCols.forEach(colData => {
+                const col = buildColumn(colData.label, colData.matches);
+                container.appendChild(col);
+            });
+
+            // After render, save if not already saved by selection (but we save after each selection)
         }
 
         // ================================================================
-        // 10. SELECT WINNER & PROPAGATE
+        // 6. SELECT WINNER & PROPAGATE (same logic)
         // ================================================================
         function selectWinner(roundIdx, matchIdx, side) {
             const match = tournament[roundIdx].matches[matchIdx];
@@ -606,9 +641,7 @@
 
             match.winner = winner;
 
-            // --- Propagate to next round ---
             if (roundIdx === 0) {
-                // R32 -> R16
                 const r16 = tournament[1];
                 for (let i = 0; i < r16.matches.length; i++) {
                     const m = r16.matches[i];
@@ -617,7 +650,6 @@
                     if (m.sources[1] === matchIdx) m.away = winner;
                 }
             } else if (roundIdx === 1) {
-                // R16 -> QF
                 const qf = tournament[2];
                 for (let i = 0; i < qf.matches.length; i++) {
                     const m = qf.matches[i];
@@ -626,7 +658,6 @@
                     if (m.sources[1] === matchIdx) m.away = winner;
                 }
             } else if (roundIdx === 2) {
-                // QF -> SF
                 const sf = tournament[3];
                 for (let i = 0; i < sf.matches.length; i++) {
                     const m = sf.matches[i];
@@ -635,10 +666,8 @@
                     if (m.sources[1] === matchIdx) m.away = winner;
                 }
             } else if (roundIdx === 3) {
-                // SF -> Final & Third Place
                 const finalMatch = tournament[5].matches[0];
                 const thirdMatch = tournament[4].matches[0];
-
                 if (matchIdx === 0) {
                     finalMatch.home = winner;
                     const loser = side === 'home' ? match.away : match.home;
@@ -649,23 +678,21 @@
                     thirdMatch.away = loser;
                 }
             } else if (roundIdx === 4) {
-                // Third Place finished
                 setTimeout(() => {
                     alert(`🥉 Third Place: ${winner.flag} ${winner.name} 🥉`);
                 }, 100);
             } else if (roundIdx === 5) {
-                // Final finished
                 setTimeout(() => {
                     alert(`🏆 Champion: ${winner.flag} ${winner.name} 🏆`);
                 }, 100);
             }
 
             renderTournament();
-            saveState(); // Auto-save after each selection
+            saveState();
         }
 
         // ================================================================
-        // 11. THEME TOGGLE
+        // 7. THEME TOGGLE
         // ================================================================
         document.getElementById('theme-toggle').addEventListener('click', function() {
             document.body.classList.toggle('light');
@@ -673,24 +700,16 @@
         });
 
         // ================================================================
-        // 12. INIT – try load from localStorage, else build fresh
+        // 8. INIT
         // ================================================================
         const saved = loadState();
-        if (saved) {
-            tournament = saved;
-        } else {
-            tournament = buildTournament();
-        }
+        tournament = saved || buildTournament();
         renderTournament();
 
-        // Reset button
         document.getElementById('reset-button').addEventListener('click', function() {
-            if (confirm('Reset all progress?')) {
-                resetState();
-            }
+            if (confirm('Reset all progress?')) resetState();
         });
 
-        // Service Worker registration
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
                 .then(() => console.log('Service Worker registered'))
