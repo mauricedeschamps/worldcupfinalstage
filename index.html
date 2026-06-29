@@ -8,12 +8,7 @@
     <link rel="apple-touch-icon" href="icons/icon-192.jpg">
     <meta name="theme-color" content="#1a1a2e">
     <style>
-        /* ----- Reset & Base ----- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: #1a1a2e;
@@ -23,14 +18,8 @@
             display: flex;
             flex-direction: column;
         }
-        body.light {
-            background: #f0f0f0;
-            color: #222;
-        }
-
-        /* ----- Header & Footer ----- */
-        header,
-        footer {
+        body.light { background: #f0f0f0; color: #222; }
+        header, footer {
             padding: 0.6rem 1rem;
             background: #16213e;
             display: flex;
@@ -40,22 +29,12 @@
             gap: 0.5rem;
             flex-shrink: 0;
         }
-        body.light header,
-        body.light footer {
-            background: #ddd;
-        }
-        header h1 {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        .header-actions {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
+        body.light header, body.light footer { background: #ddd; }
+        header h1 { font-size: 1.2rem; font-weight: 600; }
+        .header-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
         .header-actions button {
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
             color: #eee;
             padding: 0.3rem 0.8rem;
             border-radius: 2rem;
@@ -65,75 +44,44 @@
             white-space: nowrap;
         }
         body.light .header-actions button {
-            background: rgba(0, 0, 0, 0.08);
-            border-color: rgba(0, 0, 0, 0.2);
+            background: rgba(0,0,0,0.08);
+            border-color: rgba(0,0,0,0.2);
             color: #222;
         }
-        .header-actions button:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-        body.light .header-actions button:hover {
-            background: rgba(0, 0, 0, 0.15);
-        }
-        #reset-button {
-            border-color: #ff6b6b !important;
-            color: #ff6b6b !important;
-        }
-        body.light #reset-button {
-            border-color: #d63031 !important;
-            color: #d63031 !important;
-        }
-        #reset-button:hover {
-            background: rgba(255, 107, 107, 0.2) !important;
-        }
+        .header-actions button:hover { background: rgba(255,255,255,0.25); }
+        body.light .header-actions button:hover { background: rgba(0,0,0,0.15); }
+        #reset-button { border-color: #ff6b6b !important; color: #ff6b6b !important; }
+        body.light #reset-button { border-color: #d63031 !important; color: #d63031 !important; }
+        #reset-button:hover { background: rgba(255,107,107,0.2) !important; }
 
-        footer {
-            margin-top: auto;
-            justify-content: center;
-            text-align: center;
-            font-size: 0.8rem;
-        }
-        footer a {
-            color: #4fc3f7;
-            text-decoration: none;
-        }
-        body.light footer a {
-            color: #0277bd;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
+        footer { margin-top: auto; justify-content: center; text-align: center; font-size: 0.8rem; }
+        footer a { color: #4fc3f7; text-decoration: none; }
+        body.light footer a { color: #0277bd; }
+        footer a:hover { text-decoration: underline; }
 
-        /* ----- Tournament Bracket (horizontal, left & right halves) ----- */
         #tournament {
             display: flex;
             overflow-x: auto;
             padding: 1rem 0.5rem;
-            gap: 0.4rem;
+            gap: 0.6rem;
             flex: 1;
             align-items: center;
-            background: rgba(0, 0, 0, 0.15);
-            justify-content: center;
+            background: rgba(0,0,0,0.15);
         }
-        body.light #tournament {
-            background: rgba(0, 0, 0, 0.02);
-        }
+        body.light #tournament { background: rgba(0,0,0,0.02); }
 
-        /* Each column (round) */
         .round-column {
             display: flex;
             flex-direction: column;
-            gap: 0.3rem;
+            gap: 0.4rem;
             flex-shrink: 0;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255,255,255,0.04);
             border-radius: 6px;
             padding: 0.4rem 0.2rem;
-            min-width: 60px;
+            min-width: 56px;
             align-items: center;
         }
-        body.light .round-column {
-            background: rgba(0, 0, 0, 0.03);
-        }
+        body.light .round-column { background: rgba(0,0,0,0.03); }
         .round-column .round-label {
             font-size: 0.55rem;
             font-weight: 600;
@@ -143,29 +91,20 @@
             margin-bottom: 0.2rem;
             white-space: nowrap;
         }
-
-        /* Individual match card (vertical stacking) */
         .match {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255,255,255,0.06);
             border-radius: 4px;
             padding: 0.15rem 0.1rem;
             display: flex;
             flex-direction: column;
             gap: 0.05rem;
             width: 100%;
-            min-width: 44px;
+            min-width: 40px;
             border-left: 2px solid transparent;
             transition: border-color 0.2s;
         }
-        body.light .match {
-            background: #ffffff;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-        }
-        .match.has-winner {
-            border-left-color: #ffd700;
-        }
-
-        /* Team rows – flag only */
+        body.light .match { background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+        .match.has-winner { border-left-color: #ffd700; }
         .team {
             padding: 0.05rem 0.1rem;
             border-radius: 3px;
@@ -180,29 +119,18 @@
             transition: background 0.15s, opacity 0.2s, transform 0.15s;
         }
         .team:not(.winner):not(.loser):hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255,255,255,0.15);
             cursor: pointer;
         }
-        body.light .team:not(.winner):not(.loser):hover {
-            background: rgba(0, 0, 0, 0.06);
-        }
+        body.light .team:not(.winner):not(.loser):hover { background: rgba(0,0,0,0.06); }
         .team.winner {
             background: #ffd700;
             border-radius: 4px;
-            box-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 6px rgba(255,215,0,0.5);
             transform: scale(1.05);
         }
-        .team.loser {
-            opacity: 0.25;
-            filter: grayscale(0.8);
-        }
-        .team.tbd {
-            opacity: 0.3;
-            font-size: 0.8rem;
-            color: #aaa;
-        }
-
-        /* Match info (tiny) */
+        .team.loser { opacity: 0.25; filter: grayscale(0.8); }
+        .team.tbd { opacity: 0.3; font-size: 0.8rem; color: #aaa; }
         .match-info {
             font-size: 0.4rem;
             text-align: center;
@@ -210,31 +138,21 @@
             white-space: nowrap;
             margin-top: 0.05rem;
         }
-
-        /* Spacer / divider in the middle */
         .center-divider {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
-            padding: 0 0.3rem;
+            gap: 0.6rem;
+            padding: 0 0.2rem;
         }
-        .center-divider .final-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            opacity: 0.6;
-            letter-spacing: 1px;
-        }
+        .center-divider .final-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; opacity: 0.6; letter-spacing: 1px; }
 
-        /* Responsive */
         @media (max-width: 700px) {
             .team { font-size: 1rem; line-height: 1.3rem; min-height: 1.3rem; }
-            .round-column { min-width: 44px; padding: 0.2rem 0.1rem; }
-            .match { min-width: 34px; padding: 0.1rem 0.05rem; }
+            .round-column { min-width: 40px; padding: 0.2rem 0.1rem; }
+            .match { min-width: 30px; padding: 0.1rem 0.05rem; }
             .match-info { font-size: 0.35rem; }
             .round-column .round-label { font-size: 0.45rem; }
-            header h1 { font-size: 1rem; }
         }
     </style>
 </head>
@@ -256,7 +174,7 @@
 
     <script>
         // ================================================================
-        // 1. TEAM DATA (flags only)
+        // 1. TEAM DATA
         // ================================================================
         const TEAMS = [
             { name: 'South Africa', flag: '🇿🇦' },
@@ -292,13 +210,10 @@
             { name: 'Australia', flag: '🇦🇺' },
             { name: 'Egypt', flag: '🇪🇬' }
         ];
-
-        function getTeam(name) {
-            return TEAMS.find(t => t.name === name);
-        }
+        function getTeam(name) { return TEAMS.find(t => t.name === name); }
 
         // ================================================================
-        // 2. TOURNAMENT DATA (same as before, with sources)
+        // 2. TOURNAMENT DATA
         // ================================================================
         const R32_DATA = [
             { home: 'South Africa', away: 'Canada', date: 'Jun 28, 3:00 PM', stadium: 'SoFi Stadium, Los Angeles' },
@@ -356,7 +271,7 @@
         const FINAL = { date: 'Jul 19, 3:00 PM', stadium: 'MetLife Stadium, East Rutherford' };
 
         // ================================================================
-        // 3. BUILD TOURNAMENT STATE (same structure)
+        // 3. BUILD TOURNAMENT STATE
         // ================================================================
         let tournament = null;
 
@@ -369,7 +284,6 @@
                 { name: '3rd', matches: [] },
                 { name: 'Final', matches: [] }
             ];
-
             for (let i = 0; i < 16; i++) {
                 const d = R32_DATA[i];
                 rounds[0].matches.push({
@@ -386,9 +300,7 @@
             for (let i = 0; i < 8; i++) {
                 rounds[1].matches.push({
                     id: `r16_${i}`,
-                    home: null,
-                    away: null,
-                    winner: null,
+                    home: null, away: null, winner: null,
                     date: R16_SCHEDULE[i].date,
                     stadium: R16_SCHEDULE[i].stadium,
                     roundIdx: 1,
@@ -399,9 +311,7 @@
             for (let i = 0; i < 4; i++) {
                 rounds[2].matches.push({
                     id: `qf_${i}`,
-                    home: null,
-                    away: null,
-                    winner: null,
+                    home: null, away: null, winner: null,
                     date: QF_SCHEDULE[i].date,
                     stadium: QF_SCHEDULE[i].stadium,
                     roundIdx: 2,
@@ -412,9 +322,7 @@
             for (let i = 0; i < 2; i++) {
                 rounds[3].matches.push({
                     id: `sf_${i}`,
-                    home: null,
-                    away: null,
-                    winner: null,
+                    home: null, away: null, winner: null,
                     date: SF_SCHEDULE[i].date,
                     stadium: SF_SCHEDULE[i].stadium,
                     roundIdx: 3,
@@ -424,9 +332,7 @@
             }
             rounds[4].matches.push({
                 id: 'third',
-                home: null,
-                away: null,
-                winner: null,
+                home: null, away: null, winner: null,
                 date: THIRD_PLACE.date,
                 stadium: THIRD_PLACE.stadium,
                 roundIdx: 4,
@@ -435,35 +341,28 @@
             });
             rounds[5].matches.push({
                 id: 'final',
-                home: null,
-                away: null,
-                winner: null,
+                home: null, away: null, winner: null,
                 date: FINAL.date,
                 stadium: FINAL.stadium,
                 roundIdx: 5,
                 matchIdx: 0,
                 sources: null
             });
-
             return rounds;
         }
 
         // ================================================================
-        // 4. SAVE / LOAD (localStorage)
+        // 4. SAVE / LOAD
         // ================================================================
         function saveState() {
-            try {
-                const data = JSON.stringify(tournament);
-                localStorage.setItem('wc2026_bracket', data);
-            } catch (e) { console.warn('Save failed', e); }
+            try { localStorage.setItem('wc2026_bracket', JSON.stringify(tournament)); }
+            catch(e) { console.warn('Save failed', e); }
         }
-
         function loadState() {
             const stored = localStorage.getItem('wc2026_bracket');
             if (!stored) return null;
             try {
                 const parsed = JSON.parse(stored);
-                // Rebind team objects
                 for (let r = 0; r < parsed.length; r++) {
                     for (let m = 0; m < parsed[r].matches.length; m++) {
                         const match = parsed[r].matches[m];
@@ -473,12 +372,8 @@
                     }
                 }
                 return parsed;
-            } catch (e) {
-                console.warn('Load failed', e);
-                return null;
-            }
+            } catch(e) { console.warn('Load failed', e); return null; }
         }
-
         function resetState() {
             localStorage.removeItem('wc2026_bracket');
             tournament = buildTournament();
@@ -487,73 +382,68 @@
         }
 
         // ================================================================
-        // 5. RENDER – Left/Right Halves + Center
+        // 5. RENDER – LEFT HALF | CENTER | RIGHT HALF
         // ================================================================
         function renderTournament() {
             const container = document.getElementById('tournament');
             container.innerHTML = '';
 
-            // Helper to build a column for a specific set of matches
-            function buildColumn(label, matches) {
+            // Helper: build a column from an array of matches
+            function buildColumn(label, matches, extraStyle = '') {
                 const col = document.createElement('div');
                 col.className = 'round-column';
-                const labelEl = document.createElement('div');
-                labelEl.className = 'round-label';
-                labelEl.textContent = label;
-                col.appendChild(labelEl);
+                if (extraStyle) col.style.cssText += extraStyle;
+                const lbl = document.createElement('div');
+                lbl.className = 'round-label';
+                lbl.textContent = label;
+                col.appendChild(lbl);
+                matches.forEach(match => {
+                    const div = document.createElement('div');
+                    div.className = 'match';
+                    if (match.winner) div.classList.add('has-winner');
 
-                matches.forEach((match, idx) => {
-                    const matchDiv = document.createElement('div');
-                    matchDiv.className = 'match';
-                    if (match.winner) matchDiv.classList.add('has-winner');
-
-                    // Home
-                    const homeDiv = document.createElement('div');
-                    homeDiv.className = 'team home';
+                    const home = document.createElement('div');
+                    home.className = 'team home';
                     if (match.home) {
-                        homeDiv.textContent = match.home.flag;
-                        if (match.winner === match.home) homeDiv.classList.add('winner');
-                        else if (match.winner) homeDiv.classList.add('loser');
+                        home.textContent = match.home.flag;
+                        if (match.winner === match.home) home.classList.add('winner');
+                        else if (match.winner) home.classList.add('loser');
                         if (!match.winner && match.home && match.away) {
-                            homeDiv.style.cursor = 'pointer';
-                            homeDiv.addEventListener('click', () => selectWinner(match.roundIdx, match.matchIdx, 'home'));
+                            home.style.cursor = 'pointer';
+                            home.addEventListener('click', () => selectWinner(match.roundIdx, match.matchIdx, 'home'));
                         }
                     } else {
-                        homeDiv.textContent = '?';
-                        homeDiv.classList.add('tbd');
+                        home.textContent = '?';
+                        home.classList.add('tbd');
                     }
 
-                    // Away
-                    const awayDiv = document.createElement('div');
-                    awayDiv.className = 'team away';
+                    const away = document.createElement('div');
+                    away.className = 'team away';
                     if (match.away) {
-                        awayDiv.textContent = match.away.flag;
-                        if (match.winner === match.away) awayDiv.classList.add('winner');
-                        else if (match.winner) awayDiv.classList.add('loser');
+                        away.textContent = match.away.flag;
+                        if (match.winner === match.away) away.classList.add('winner');
+                        else if (match.winner) away.classList.add('loser');
                         if (!match.winner && match.home && match.away) {
-                            awayDiv.style.cursor = 'pointer';
-                            awayDiv.addEventListener('click', () => selectWinner(match.roundIdx, match.matchIdx, 'away'));
+                            away.style.cursor = 'pointer';
+                            away.addEventListener('click', () => selectWinner(match.roundIdx, match.matchIdx, 'away'));
                         }
                     } else {
-                        awayDiv.textContent = '?';
-                        awayDiv.classList.add('tbd');
+                        away.textContent = '?';
+                        away.classList.add('tbd');
                     }
 
-                    // Info
-                    const infoDiv = document.createElement('div');
-                    infoDiv.className = 'match-info';
-                    infoDiv.textContent = `${match.date} | ${match.stadium}`;
+                    const info = document.createElement('div');
+                    info.className = 'match-info';
+                    info.textContent = `${match.date} | ${match.stadium}`;
 
-                    matchDiv.appendChild(homeDiv);
-                    matchDiv.appendChild(awayDiv);
-                    matchDiv.appendChild(infoDiv);
-                    col.appendChild(matchDiv);
+                    div.appendChild(home);
+                    div.appendChild(away);
+                    div.appendChild(info);
+                    col.appendChild(div);
                 });
-
                 return col;
             }
 
-            // Split matches per round into left/right halves
             const r32 = tournament[0].matches;
             const r16 = tournament[1].matches;
             const qf  = tournament[2].matches;
@@ -561,76 +451,57 @@
             const third = tournament[4].matches[0];
             const final = tournament[5].matches[0];
 
-            // Left half indices: R32 0-7, R16 0-3, QF 0-1, SF 0
+            // Split each round into left and right halves
             const leftR32 = r32.slice(0, 8);
             const leftR16 = r16.slice(0, 4);
             const leftQF  = qf.slice(0, 2);
             const leftSF  = sf.slice(0, 1);
 
-            // Right half indices: R32 8-15, R16 4-7, QF 2-3, SF 1
             const rightR32 = r32.slice(8, 16);
             const rightR16 = r16.slice(4, 8);
             const rightQF  = qf.slice(2, 4);
             const rightSF  = sf.slice(1, 2);
 
-            // --- Build left side (from left to center) ---
-            // Order: R32 (leftmost) → R16 → QF → SF (closer to center)
-            const leftCols = [
-                { label: 'R32', matches: leftR32 },
-                { label: 'R16', matches: leftR16 },
-                { label: 'QF', matches: leftQF },
-                { label: 'SF', matches: leftSF }
-            ];
-            leftCols.forEach(colData => {
-                const col = buildColumn(colData.label, colData.matches);
-                container.appendChild(col);
-            });
+            // --- LEFT SIDE (outer → inner) ---
+            container.appendChild(buildColumn('R32', leftR32));
+            container.appendChild(buildColumn('R16', leftR16));
+            container.appendChild(buildColumn('QF', leftQF));
+            container.appendChild(buildColumn('SF', leftSF));
 
-            // --- Center: Final (top) and Third Place (bottom) ---
-            const centerDiv = document.createElement('div');
-            centerDiv.className = 'center-divider';
-
+            // --- CENTER (Final & Third) ---
+            const center = document.createElement('div');
+            center.className = 'center-divider';
             // Final
             const finalCol = buildColumn('Final', [final]);
             finalCol.style.background = 'rgba(255,215,0,0.08)';
             finalCol.style.border = '1px solid rgba(255,215,0,0.3)';
             finalCol.style.borderRadius = '8px';
             finalCol.style.padding = '0.4rem 0.3rem';
-            centerDiv.appendChild(finalCol);
-
-            // Spacer
-            const spacer = document.createElement('div');
-            spacer.style.height = '0.8rem';
-            centerDiv.appendChild(spacer);
-
-            // Third Place
+            center.appendChild(finalCol);
+            // spacer
+            const sp = document.createElement('div');
+            sp.style.height = '0.6rem';
+            center.appendChild(sp);
+            // Third
             const thirdCol = buildColumn('3rd', [third]);
             thirdCol.style.background = 'rgba(192,192,192,0.06)';
             thirdCol.style.border = '1px solid rgba(192,192,192,0.2)';
             thirdCol.style.borderRadius = '8px';
             thirdCol.style.padding = '0.4rem 0.3rem';
-            centerDiv.appendChild(thirdCol);
+            center.appendChild(thirdCol);
+            container.appendChild(center);
 
-            container.appendChild(centerDiv);
+            // --- RIGHT SIDE (inner → outer) ---
+            container.appendChild(buildColumn('SF', rightSF));
+            container.appendChild(buildColumn('QF', rightQF));
+            container.appendChild(buildColumn('R16', rightR16));
+            container.appendChild(buildColumn('R32', rightR32));
 
-            // --- Build right side (from center to right) ---
-            // Order: SF → QF → R16 → R32 (rightmost)
-            const rightCols = [
-                { label: 'SF', matches: rightSF },
-                { label: 'QF', matches: rightQF },
-                { label: 'R16', matches: rightR16 },
-                { label: 'R32', matches: rightR32 }
-            ];
-            rightCols.forEach(colData => {
-                const col = buildColumn(colData.label, colData.matches);
-                container.appendChild(col);
-            });
-
-            // After render, save if not already saved by selection (but we save after each selection)
+            // After render, save if not already saved (but we save after each selection)
         }
 
         // ================================================================
-        // 6. SELECT WINNER & PROPAGATE (same logic)
+        // 6. SELECT WINNER & PROPAGATE
         // ================================================================
         function selectWinner(roundIdx, matchIdx, side) {
             const match = tournament[roundIdx].matches[matchIdx];
@@ -642,6 +513,7 @@
             match.winner = winner;
 
             if (roundIdx === 0) {
+                // R32 → R16
                 const r16 = tournament[1];
                 for (let i = 0; i < r16.matches.length; i++) {
                     const m = r16.matches[i];
@@ -650,6 +522,7 @@
                     if (m.sources[1] === matchIdx) m.away = winner;
                 }
             } else if (roundIdx === 1) {
+                // R16 → QF
                 const qf = tournament[2];
                 for (let i = 0; i < qf.matches.length; i++) {
                     const m = qf.matches[i];
@@ -658,6 +531,7 @@
                     if (m.sources[1] === matchIdx) m.away = winner;
                 }
             } else if (roundIdx === 2) {
+                // QF → SF
                 const sf = tournament[3];
                 for (let i = 0; i < sf.matches.length; i++) {
                     const m = sf.matches[i];
@@ -666,6 +540,7 @@
                     if (m.sources[1] === matchIdx) m.away = winner;
                 }
             } else if (roundIdx === 3) {
+                // SF → Final & Third
                 const finalMatch = tournament[5].matches[0];
                 const thirdMatch = tournament[4].matches[0];
                 if (matchIdx === 0) {
@@ -678,13 +553,9 @@
                     thirdMatch.away = loser;
                 }
             } else if (roundIdx === 4) {
-                setTimeout(() => {
-                    alert(`🥉 Third Place: ${winner.flag} ${winner.name} 🥉`);
-                }, 100);
+                setTimeout(() => alert(`🥉 Third Place: ${winner.flag} ${winner.name} 🥉`), 100);
             } else if (roundIdx === 5) {
-                setTimeout(() => {
-                    alert(`🏆 Champion: ${winner.flag} ${winner.name} 🏆`);
-                }, 100);
+                setTimeout(() => alert(`🏆 Champion: ${winner.flag} ${winner.name} 🏆`), 100);
             }
 
             renderTournament();
