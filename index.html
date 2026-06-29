@@ -102,7 +102,6 @@
             text-decoration: underline;
         }
 
-        /* ----- トーナメント表: シンプル＆大判フラグ ----- */
         #tournament {
             display: flex;
             overflow-x: auto;
@@ -120,11 +119,11 @@
             display: flex;
             flex-direction: column;
             gap: 0.7rem;
-            flex-shrink: 0;  /* 縮まない */
+            flex-shrink: 0;
             background: rgba(255, 255, 255, 0.04);
             border-radius: 8px;
             padding: 0.5rem 0.3rem;
-            min-width: 76px;  /* フラグが大きくても入る幅 */
+            min-width: 76px;
             align-items: center;
         }
         body.light .round-column {
@@ -160,12 +159,11 @@
             border-left-color: #ffd700;
         }
 
-        /* ----- 国旗を大きく（スマホでタップしやすく） ----- */
         .team {
             padding: 0.15rem 0.2rem;
             border-radius: 4px;
             cursor: default;
-            font-size: 2.4rem;   /* ← 大きく */
+            font-size: 2.4rem;
             text-align: center;
             line-height: 2.8rem;
             min-height: 2.8rem;
@@ -205,7 +203,6 @@
             margin-top: 0.05rem;
         }
 
-        /* 中央（決勝・3位決定戦） */
         .center-divider {
             display: flex;
             flex-direction: column;
@@ -214,7 +211,6 @@
             padding: 0 0.3rem;
         }
 
-        /* スマホ用調整 */
         @media (max-width: 700px) {
             .team {
                 font-size: 2rem;
@@ -257,70 +253,97 @@
 
     <script>
         // ================================================================
-        // 1. チームデータ（国旗のみ）
+        // 1. チームデータ（国旗）
         // ================================================================
         const TEAMS = [
-            { name: 'South Africa', flag: '🇿🇦' },
-            { name: 'Canada', flag: '🇨🇦' },
+            // 左の山（16チーム）
             { name: 'Germany', flag: '🇩🇪' },
             { name: 'Paraguay', flag: '🇵🇾' },
-            { name: 'Netherlands', flag: '🇳🇱' },
-            { name: 'Morocco', flag: '🇲🇦' },
-            { name: 'Brazil', flag: '🇧🇷' },
-            { name: 'Japan', flag: '🇯🇵' },
             { name: 'France', flag: '🇫🇷' },
             { name: 'Sweden', flag: '🇸🇪' },
+            { name: 'South Africa', flag: '🇿🇦' },
+            { name: 'Canada', flag: '🇨🇦' },
+            { name: 'Netherlands', flag: '🇳🇱' },
+            { name: 'Morocco', flag: '🇲🇦' },
+            { name: 'Portugal', flag: '🇵🇹' },
+            { name: 'Croatia', flag: '🇭🇷' },
+            { name: 'Spain', flag: '🇪🇸' },
+            { name: 'USA', flag: '🇺🇸' },
+            { name: 'Bosnia and Herzegovina', flag: '🇧🇦' },
+            { name: 'Belgium', flag: '🇧🇪' },
+            { name: 'Senegal', flag: '🇸🇳' },
+            { name: 'Switzerland', flag: '🇨🇭' },
+            // 右の山（16チーム）
+            { name: 'Brazil', flag: '🇧🇷' },
+            { name: 'Japan', flag: '🇯🇵' },
             { name: 'Ivory Coast', flag: '🇨🇮' },
             { name: 'Norway', flag: '🇳🇴' },
             { name: 'Mexico', flag: '🇲🇽' },
             { name: 'Ecuador', flag: '🇪🇨' },
             { name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
             { name: 'DR Congo', flag: '🇨🇩' },
-            { name: 'USA', flag: '🇺🇸' },
-            { name: 'Bosnia and Herzegovina', flag: '🇧🇦' },
-            { name: 'Belgium', flag: '🇧🇪' },
-            { name: 'Senegal', flag: '🇸🇳' },
-            { name: 'Portugal', flag: '🇵🇹' },
-            { name: 'Croatia', flag: '🇭🇷' },
-            { name: 'Spain', flag: '🇪🇸' },
-            { name: 'Austria', flag: '🇦🇹' },
-            { name: 'Switzerland', flag: '🇨🇭' },
-            { name: 'Algeria', flag: '🇩🇿' },
             { name: 'Argentina', flag: '🇦🇷' },
             { name: 'Cape Verde', flag: '🇨🇻' },
+            { name: 'Australia', flag: '🇦🇺' },
+            { name: 'Egypt', flag: '🇪🇬' },
+            { name: 'Algeria', flag: '🇩🇿' },
             { name: 'Colombia', flag: '🇨🇴' },
             { name: 'Ghana', flag: '🇬🇭' },
-            { name: 'Australia', flag: '🇦🇺' },
-            { name: 'Egypt', flag: '🇪🇬' }
+            { name: 'Austria', flag: '🇦🇹' }
         ];
         function getTeam(name) { return TEAMS.find(t => t.name === name); }
 
         // ================================================================
-        // 2. トーナメントデータ（実際の組み合わせ）
+        // 2. ラウンド32の対戦カード（左の山 → 右の山）
         // ================================================================
-        const R32_DATA = [
-            { home: 'South Africa', away: 'Canada', date: 'Jun 28, 3:00 PM', stadium: 'SoFi Stadium, Los Angeles' },
-            { home: 'Germany', away: 'Paraguay', date: 'Jun 29, 4:30 PM', stadium: 'Gillette Stadium, Foxborough' },
-            { home: 'Netherlands', away: 'Morocco', date: 'Jun 29, 9:00 PM', stadium: 'Estadio BBVA, Guadalupe' },
-            { home: 'Brazil', away: 'Japan', date: 'Jun 29, 1:00 PM', stadium: 'NRG Stadium, Houston' },
-            { home: 'France', away: 'Sweden', date: 'Jun 30, 5:00 PM', stadium: 'MetLife Stadium, East Rutherford' },
-            { home: 'Ivory Coast', away: 'Norway', date: 'Jun 30, 1:00 PM', stadium: 'AT&T Stadium, Arlington' },
-            { home: 'Mexico', away: 'Ecuador', date: 'Jun 30, 9:00 PM', stadium: 'Estadio Azteca, Mexico City' },
-            { home: 'England', away: 'DR Congo', date: 'Jul 1, 12:00 PM', stadium: 'Mercedes-Benz Stadium, Atlanta' },
-            { home: 'USA', away: 'Bosnia and Herzegovina', date: 'Jul 1, 8:00 PM', stadium: "Levi's Stadium, Santa Clara" },
-            { home: 'Belgium', away: 'Senegal', date: 'Jul 1, 4:00 PM', stadium: 'Lumen Field, Seattle' },
-            { home: 'Portugal', away: 'Croatia', date: 'Jul 2, 7:00 PM', stadium: 'BMO Field, Toronto' },
-            { home: 'Spain', away: 'Austria', date: 'Jul 2, 3:00 PM', stadium: 'SoFi Stadium, Los Angeles' },
-            { home: 'Switzerland', away: 'Algeria', date: 'Jul 2, 11:00 PM', stadium: 'BC Place, Vancouver' },
-            { home: 'Argentina', away: 'Cape Verde', date: 'Jul 3, 6:00 PM', stadium: 'Hard Rock Stadium, Miami Gardens' },
-            { home: 'Colombia', away: 'Ghana', date: 'Jul 3, 9:30 PM', stadium: 'Arrowhead Stadium, Kansas City' },
-            { home: 'Australia', away: 'Egypt', date: 'Jul 3, 2:00 PM', stadium: 'AT&T Stadium, Arlington' }
+        // 左の山の16チーム（インデックス 0〜15）
+        const LEFT_TEAMS = TEAMS.slice(0, 16);
+        // 右の山の16チーム（インデックス 16〜31）
+        const RIGHT_TEAMS = TEAMS.slice(16, 32);
+
+        // 左の山の対戦（8試合）
+        const LEFT_R32 = [
+            { home: 'Germany', away: 'Paraguay' },
+            { home: 'France', away: 'Sweden' },
+            { home: 'South Africa', away: 'Canada' },
+            { home: 'Netherlands', away: 'Morocco' },
+            { home: 'Portugal', away: 'Croatia' },
+            { home: 'Spain', away: 'USA' },
+            { home: 'Bosnia and Herzegovina', away: 'Belgium' },
+            { home: 'Senegal', away: 'Switzerland' }
         ];
 
-        const R16_SOURCES = [
-            [0, 2], [1, 4], [3, 5], [6, 7],
-            [10, 11], [8, 9], [13, 15], [12, 14]
+        // 右の山の対戦（8試合）
+        const RIGHT_R32 = [
+            { home: 'Brazil', away: 'Japan' },
+            { home: 'Ivory Coast', away: 'Norway' },
+            { home: 'Mexico', away: 'Ecuador' },
+            { home: 'England', away: 'DR Congo' },
+            { home: 'Argentina', away: 'Cape Verde' },
+            { home: 'Australia', away: 'Egypt' },
+            { home: 'Algeria', away: 'Colombia' },
+            { home: 'Ghana', away: 'Austria' }
         ];
+
+        // 全R32データ（左→右の順）
+        const R32_DATA = LEFT_R32.concat(RIGHT_R32);
+
+        // ================================================================
+        // 3. ラウンド16以降のソース（インデックスはR32_DATAの順）
+        // ================================================================
+        // R32_DATAのインデックス
+        // 左: 0-7, 右: 8-15
+        const R16_SOURCES = [
+            [0, 2], // 左: 試合0 vs 試合2
+            [1, 4], // 左: 試合1 vs 試合4
+            [3, 5], // 左: 試合3 vs 試合5
+            [6, 7], // 左: 試合6 vs 試合7
+            [8, 10], // 右: 試合8 vs 試合10
+            [9, 11], // 右: 試合9 vs 試合11
+            [12, 14], // 右: 試合12 vs 試合14
+            [13, 15] // 右: 試合13 vs 試合15
+        ];
+
         const R16_SCHEDULE = [
             { date: 'Jul 4, 1:00 PM', stadium: 'Gillette Stadium, Foxborough' },
             { date: 'Jul 4, 5:00 PM', stadium: 'MetLife Stadium, East Rutherford' },
@@ -332,8 +355,12 @@
             { date: 'Jul 7, 4:00 PM', stadium: 'Estadio Azteca, Mexico City' }
         ];
 
+        // QF
         const QF_SOURCES = [
-            [0, 1], [4, 5], [2, 3], [6, 7]
+            [0, 1], // 左
+            [4, 5], // 右
+            [2, 3], // 左
+            [6, 7] // 右
         ];
         const QF_SCHEDULE = [
             { date: 'Jul 9, 4:00 PM', stadium: 'Gillette Stadium, Foxborough' },
@@ -342,8 +369,10 @@
             { date: 'Jul 11, 9:00 PM', stadium: 'NRG Stadium, Houston' }
         ];
 
+        // SF
         const SF_SOURCES = [
-            [0, 1], [2, 3]
+            [0, 1], // 左の準決勝
+            [2, 3] // 右の準決勝
         ];
         const SF_SCHEDULE = [
             { date: 'Jul 14, 3:00 PM', stadium: 'AT&T Stadium, Arlington' },
@@ -354,7 +383,7 @@
         const FINAL = { date: 'Jul 19, 3:00 PM', stadium: 'MetLife Stadium, East Rutherford' };
 
         // ================================================================
-        // 3. トーナメント状態の構築
+        // 4. トーナメント状態の構築
         // ================================================================
         let tournament = null;
 
@@ -367,19 +396,21 @@
                 { name: '3rd', matches: [] },
                 { name: 'Final', matches: [] }
             ];
-            for (let i = 0; i < 16; i++) {
+            // R32
+            for (let i = 0; i < R32_DATA.length; i++) {
                 const d = R32_DATA[i];
                 rounds[0].matches.push({
                     id: `r32_${i}`,
                     home: getTeam(d.home),
                     away: getTeam(d.away),
                     winner: null,
-                    date: d.date,
-                    stadium: d.stadium,
+                    date: `Jun ${28 + Math.floor(i/2)}, ${(i%2===0)?'1:00 PM':'4:30 PM'}`,
+                    stadium: 'TBD',
                     roundIdx: 0,
                     matchIdx: i
                 });
             }
+            // R16
             for (let i = 0; i < 8; i++) {
                 rounds[1].matches.push({
                     id: `r16_${i}`,
@@ -391,6 +422,7 @@
                     sources: R16_SOURCES[i]
                 });
             }
+            // QF
             for (let i = 0; i < 4; i++) {
                 rounds[2].matches.push({
                     id: `qf_${i}`,
@@ -402,6 +434,7 @@
                     sources: QF_SOURCES[i]
                 });
             }
+            // SF
             for (let i = 0; i < 2; i++) {
                 rounds[3].matches.push({
                     id: `sf_${i}`,
@@ -413,6 +446,7 @@
                     sources: SF_SOURCES[i]
                 });
             }
+            // 3rd
             rounds[4].matches.push({
                 id: 'third',
                 home: null, away: null, winner: null,
@@ -422,6 +456,7 @@
                 matchIdx: 0,
                 sources: null
             });
+            // Final
             rounds[5].matches.push({
                 id: 'final',
                 home: null, away: null, winner: null,
@@ -435,10 +470,10 @@
         }
 
         // ================================================================
-        // 4. 保存／復元（localStorage）
+        // 5. 保存／復元
         // ================================================================
         function saveState() {
-            try { localStorage.setItem('wc2026_bracket', JSON.stringify(tournament)); } catch (e) { console.warn('Save failed', e); }
+            try { localStorage.setItem('wc2026_bracket', JSON.stringify(tournament)); } catch (e) {}
         }
 
         function loadState() {
@@ -455,7 +490,7 @@
                     }
                 }
                 return parsed;
-            } catch (e) { console.warn('Load failed', e); return null; }
+            } catch (e) { return null; }
         }
 
         function resetState() {
@@ -466,7 +501,7 @@
         }
 
         // ================================================================
-        // 5. レンダリング（左右の山を明確に分離）
+        // 6. レンダリング
         // ================================================================
         function renderTournament() {
             const container = document.getElementById('tournament');
@@ -479,19 +514,18 @@
             const third = tournament[4].matches[0];
             const final = tournament[5].matches[0];
 
-            // ----- 左の山（インデックス 0〜7） -----
+            // 左の山（R32インデックス 0〜7）
             const leftR32 = r32.slice(0, 8);
             const leftR16 = r16.slice(0, 4);
             const leftQF = qf.slice(0, 2);
             const leftSF = sf.slice(0, 1);
 
-            // ----- 右の山（インデックス 8〜15） -----
+            // 右の山（R32インデックス 8〜15）
             const rightR32 = r32.slice(8, 16);
             const rightR16 = r16.slice(4, 8);
             const rightQF = qf.slice(2, 4);
             const rightSF = sf.slice(1, 2);
 
-            // 列生成ヘルパー（マッチ配列を受け取って列DOMを返す）
             function buildColumn(label, matches, extraStyle = '') {
                 const col = document.createElement('div');
                 col.className = 'round-column';
@@ -548,37 +582,31 @@
                 return col;
             }
 
-            // ---- 1. 左側の山（外側 → 内側） ----
+            // 左側
             container.appendChild(buildColumn('R32', leftR32));
             container.appendChild(buildColumn('R16', leftR16));
             container.appendChild(buildColumn('QF', leftQF));
             container.appendChild(buildColumn('SF', leftSF));
 
-            // ---- 2. 中央（Final と 3rd） ----
+            // 中央
             const center = document.createElement('div');
             center.className = 'center-divider';
-
             const finalCol = buildColumn('Final', [final]);
             finalCol.style.background = 'rgba(255,215,0,0.08)';
             finalCol.style.border = '1px solid rgba(255,215,0,0.3)';
             finalCol.style.borderRadius = '8px';
-            finalCol.style.padding = '0.5rem 0.3rem';
             center.appendChild(finalCol);
-
             const spacer = document.createElement('div');
             spacer.style.height = '0.8rem';
             center.appendChild(spacer);
-
             const thirdCol = buildColumn('3rd', [third]);
             thirdCol.style.background = 'rgba(192,192,192,0.06)';
             thirdCol.style.border = '1px solid rgba(192,192,192,0.2)';
             thirdCol.style.borderRadius = '8px';
-            thirdCol.style.padding = '0.5rem 0.3rem';
             center.appendChild(thirdCol);
-
             container.appendChild(center);
 
-            // ---- 3. 右側の山（内側 → 外側） ----
+            // 右側
             container.appendChild(buildColumn('SF', rightSF));
             container.appendChild(buildColumn('QF', rightQF));
             container.appendChild(buildColumn('R16', rightR16));
@@ -586,7 +614,7 @@
         }
 
         // ================================================================
-        // 6. 勝者選択と伝播
+        // 7. 勝者選択と伝播
         // ================================================================
         function selectWinner(roundIdx, matchIdx, side) {
             const match = tournament[roundIdx].matches[matchIdx];
@@ -644,7 +672,7 @@
         }
 
         // ================================================================
-        // 7. テーマ切り替え
+        // 8. テーマ切り替え
         // ================================================================
         document.getElementById('theme-toggle').addEventListener('click', function() {
             document.body.classList.toggle('light');
@@ -652,7 +680,7 @@
         });
 
         // ================================================================
-        // 8. 初期化
+        // 9. 初期化
         // ================================================================
         const saved = loadState();
         tournament = saved || buildTournament();
