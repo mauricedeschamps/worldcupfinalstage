@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>World Cup Knockout Simulator</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.jpg">
+    <meta name="theme-color" content="#1a1a2e">
+    <style>
+        /* ----- Reset & Base ----- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            transition: background 0.3s, color 0.3s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        body.light {
+            background: #f0f0f0;
+            color: #222;
+        }
+
+        /* ----- Header & Footer ----- */
+        header,
+        footer {
+            padding: 0.8rem 1rem;
+            background: #16213e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        body.light header,
+        body.light footer {
+            background: #ddd;
+        }
+        header h1 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .header-actions button {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #eee;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        body.light .header-actions button {
+            background: rgba(0, 0, 0, 0.08);
+            border-color: rgba(0, 0, 0, 0.2);
+            color: #222;
+        }
+        .header-actions button:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        body.light .header-actions button:hover {
+            background: rgba(0, 0, 0, 0.15);
+        }
+        #reset-button {
+            border-color: #ff6b6b !important;
+            color: #ff6b6b !important;
+        }
+        body.light #reset-button {
+            border-color: #d63031 !important;
+            color: #d63031 !important;
+        }
+        #reset-button:hover {
+            background: rgba(255, 107, 107, 0.2) !important;
+        }
+
+        footer {
+            margin-top: auto;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        footer a {
+            color: #4fc3f7;
+            text-decoration: none;
+        }
+        body.light footer a {
+            color: #0277bd;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ----- Tournament Bracket (horizontal scroll) ----- */
+        #tournament {
+            display: flex;
+            overflow-x: auto;
+            padding: 1rem 0.5rem;
+            gap: 0.6rem;
+            flex: 1;
+            align-items: flex-start;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        body.light #tournament {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        /* Each round is a column */
+        .round {
+            flex: 0 0 auto;
+            min-width: 100px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 0.5rem 0.3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        body.light .round {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        .round h2 {
+            text-align: center;
+            font-size: 0.65rem;
+            font-weight: 600;
+            margin: 0 0 0.3rem 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        /* Each match card */
+        .match {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 4px;
+            padding: 0.3rem 0.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+            transition: background 0.2s;
+            border-left: 3px solid transparent;
+        }
+        body.light .match {
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        .match.has-winner {
+            border-left-color: #ffd700;
+        }
+
+        /* Team rows - only flag */
+        .team {
+            padding: 0.1rem 0.2rem;
+            border-radius: 3px;
+            cursor: default;
+            font-size: 1.4rem;
+            text-align: center;
+            line-height: 1.6rem;
+            transition: background 0.15s, opacity 0.2s;
+            min-height: 1.8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .team:not(.winner):not(.loser):hover {
+            background: rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+        }
+        body.light .team:not(.winner):not(.loser):hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+        .team.winner {
+            background: #ffd700;
+            border-radius: 4px;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+            transform: scale(1.05);
+        }
+        .team.loser {
+            opacity: 0.25;
+            filter: grayscale(0.8);
+        }
+        .team.tbd {
+            opacity: 0.3;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Match info (date/stadium) - small, optional */
+        .match-info {
+            font-size: 0.45rem;
+            text-align: center;
+            opacity: 0.4;
+            margin-top: 0.1rem;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header h1 { font-size: 1rem; }
+            .round { min-width: 70px; padding: 0.3rem 0.2rem; }
+            .team { font-size: 1.2rem; line-height: 1.4rem; min-height: 1.5rem; }
+            .match-info { font-size: 0.4rem; }
+            .header-actions button { font-size: 0.7rem; padding: 0.2rem 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>⚽ World Cup 2026</h1>
+        <div class="header-actions">
+            <button id="reset-button">🔄 Reset</button>
+            <button id="theme-toggle">Light Mode</button>
+        </div>
+    </header>
+
+    <main id="tournament"></main>
+
+    <footer>
+        <p>Contact us<br><a href="mailto:mementomorikatsu@gmail.com">mementomorikatsu@gmail.com</a></p>
+    </footer>
+
+    <script>
+        // ================================================================
+        // 1. TEAM DATA (with flags only – we'll use the emoji)
+        // ================================================================
+        const TEAMS = [
+            { name: 'South Africa', flag: '🇿🇦' },
+            { name: 'Canada', flag: '🇨🇦' },
+            { name: 'Germany', flag: '🇩🇪' },
+            { name: 'Paraguay', flag: '🇵🇾' },
+            { name: 'Netherlands', flag: '🇳🇱' },
+            { name: 'Morocco', flag: '🇲🇦' },
+            { name: 'Brazil', flag: '🇧🇷' },
+            { name: 'Japan', flag: '🇯🇵' },
+            { name: 'France', flag: '🇫🇷' },
+            { name: 'Sweden', flag: '🇸🇪' },
+            { name: 'Ivory Coast', flag: '🇨🇮' },
+            { name: 'Norway', flag: '🇳🇴' },
+            { name: 'Mexico', flag: '🇲🇽' },
+            { name: 'Ecuador', flag: '🇪🇨' },
+            { name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
+            { name: 'DR Congo', flag: '🇨🇩' },
+            { name: 'USA', flag: '🇺🇸' },
+            { name: 'Bosnia and Herzegovina', flag: '🇧🇦' },
+            { name: 'Belgium', flag: '🇧🇪' },
+            { name: 'Senegal', flag: '🇸🇳' },
+            { name: 'Portugal', flag: '🇵🇹' },
+            { name: 'Croatia', flag: '🇭🇷' },
+            { name: 'Spain', flag: '🇪🇸' },
+            { name: 'Austria', flag: '🇦🇹' },
+            { name: 'Switzerland', flag: '🇨🇭' },
+            { name: 'Algeria', flag: '🇩🇿' },
+            { name: 'Argentina', flag: '🇦🇷' },
+            { name: 'Cape Verde', flag: '🇨🇻' },
+            { name: 'Colombia', flag: '🇨🇴' },
+            { name: 'Ghana', flag: '🇬🇭' },
+            { name: 'Australia', flag: '🇦🇺' },
+            { name: 'Egypt', flag: '🇪🇬' }
+        ];
+
+        function getTeam(name) {
+            return TEAMS.find(t => t.name === name);
+        }
+
+        // ================================================================
+        // 2. ROUND OF 32 – 16 matches (Match 73–88)
+        // ================================================================
+        const R32_DATA = [
+            { home: 'South Africa', away: 'Canada', date: 'Jun 28, 3:00 PM', stadium: 'SoFi Stadium, Los Angeles' },
+            { home: 'Germany', away: 'Paraguay', date: 'Jun 29, 4:30 PM', stadium: 'Gillette Stadium, Foxborough' },
+            { home: 'Netherlands', away: 'Morocco', date: 'Jun 29, 9:00 PM', stadium: 'Estadio BBVA, Guadalupe' },
+            { home: 'Brazil', away: 'Japan', date: 'Jun 29, 1:00 PM', stadium: 'NRG Stadium, Houston' },
+            { home: 'France', away: 'Sweden', date: 'Jun 30, 5:00 PM', stadium: 'MetLife Stadium, East Rutherford' },
+            { home: 'Ivory Coast', away: 'Norway', date: 'Jun 30, 1:00 PM', stadium: 'AT&T Stadium, Arlington' },
+            { home: 'Mexico', away: 'Ecuador', date: 'Jun 30, 9:00 PM', stadium: 'Estadio Azteca, Mexico City' },
+            { home: 'England', away: 'DR Congo', date: 'Jul 1, 12:00 PM', stadium: 'Mercedes-Benz Stadium, Atlanta' },
+            { home: 'USA', away: 'Bosnia and Herzegovina', date: 'Jul 1, 8:00 PM', stadium: "Levi's Stadium, Santa Clara" },
+            { home: 'Belgium', away: 'Senegal', date: 'Jul 1, 4:00 PM', stadium: 'Lumen Field, Seattle' },
+            { home: 'Portugal', away: 'Croatia', date: 'Jul 2, 7:00 PM', stadium: 'BMO Field, Toronto' },
+            { home: 'Spain', away: 'Austria', date: 'Jul 2, 3:00 PM', stadium: 'SoFi Stadium, Los Angeles' },
+            { home: 'Switzerland', away: 'Algeria', date: 'Jul 2, 11:00 PM', stadium: 'BC Place, Vancouver' },
+            { home: 'Argentina', away: 'Cape Verde', date: 'Jul 3, 6:00 PM', stadium: 'Hard Rock Stadium, Miami Gardens' },
+            { home: 'Colombia', away: 'Ghana', date: 'Jul 3, 9:30 PM', stadium: 'Arrowhead Stadium, Kansas City' },
+            { home: 'Australia', away: 'Egypt', date: 'Jul 3, 2:00 PM', stadium: 'AT&T Stadium, Arlington' }
+        ];
+
+        // ================================================================
+        // 3. ROUND OF 16 – 8 matches (Match 89–96)
+        // ================================================================
+        const R16_SOURCES = [
+            [0, 2], // 89: W73 vs W75
+            [1, 4], // 90: W74 vs W77
+            [3, 5], // 91: W76 vs W78
+            [6, 7], // 92: W79 vs W80
+            [10, 11], // 93: W83 vs W84
+            [8, 9], // 94: W81 vs W82
+            [13, 15], // 95: W86 vs W88
+            [12, 14] // 96: W85 vs W87
+        ];
+
+        const R16_SCHEDULE = [
+            { date: 'Jul 4, 1:00 PM', stadium: 'Gillette Stadium, Foxborough' },
+            { date: 'Jul 4, 5:00 PM', stadium: 'MetLife Stadium, East Rutherford' },
+            { date: 'Jul 5, 4:00 PM', stadium: 'SoFi Stadium, Los Angeles' },
+            { date: 'Jul 5, 8:00 PM', stadium: 'NRG Stadium, Houston' },
+            { date: 'Jul 6, 3:00 PM', stadium: "Levi's Stadium, Santa Clara" },
+            { date: 'Jul 6, 8:00 PM', stadium: 'Lumen Field, Seattle' },
+            { date: 'Jul 7, 12:00 PM', stadium: 'Mercedes-Benz Stadium, Atlanta' },
+            { date: 'Jul 7, 4:00 PM', stadium: 'Estadio Azteca, Mexico City' }
+        ];
+
+        // ================================================================
+        // 4. QUARTER-FINALS – 4 matches (Match 97–100)
+        // ================================================================
+        const QF_SOURCES = [
+            [0, 1], // 97: W89 vs W90
+            [4, 5], // 98: W93 vs W94
+            [2, 3], // 99: W91 vs W92
+            [6, 7] // 100: W95 vs W96
+        ];
+
+        const QF_SCHEDULE = [
+            { date: 'Jul 9, 4:00 PM', stadium: 'Gillette Stadium, Foxborough' },
+            { date: 'Jul 10, 3:00 PM', stadium: 'SoFi Stadium, Los Angeles' },
+            { date: 'Jul 11, 5:00 PM', stadium: 'MetLife Stadium, East Rutherford' },
+            { date: 'Jul 11, 9:00 PM', stadium: 'NRG Stadium, Houston' }
+        ];
+
+        // ================================================================
+        // 5. SEMI-FINALS – 2 matches (Match 101–102)
+        // ================================================================
+        const SF_SOURCES = [
+            [0, 1], // 101: W97 vs W98
+            [2, 3] // 102: W99 vs W100
+        ];
+
+        const SF_SCHEDULE = [
+            { date: 'Jul 14, 3:00 PM', stadium: 'AT&T Stadium, Arlington' },
+            { date: 'Jul 15, 3:00 PM', stadium: 'Mercedes-Benz Stadium, Atlanta' }
+        ];
+
+        // ================================================================
+        // 6. THIRD PLACE & FINAL
+        // ================================================================
+        const THIRD_PLACE = { date: 'Jul 18, 5:00 PM', stadium: 'Hard Rock Stadium, Miami Gardens' };
+        const FINAL = { date: 'Jul 19, 3:00 PM', stadium: 'MetLife Stadium, East Rutherford' };
+
+        // ================================================================
+        // 7. BUILD TOURNAMENT STATE
+        // ================================================================
+        let tournament = null;
+
+        function buildTournament() {
+            // rounds: 0=R32, 1=R16, 2=QF, 3=SF, 4=Third, 5=Final
+            const rounds = [
+                { name: 'R32', matches: [] },
+                { name: 'R16', matches: [] },
+                { name: 'QF', matches: [] },
+                { name: 'SF', matches: [] },
+                { name: '3rd', matches: [] },
+                { name: 'Final', matches: [] }
+            ];
+
+            // -- Round of 32 (16 matches) --
+            for (let i = 0; i < 16; i++) {
+                const d = R32_DATA[i];
+                rounds[0].matches.push({
+                    id: `r32_${i}`,
+                    home: getTeam(d.home),
+                    away: getTeam(d.away),
+                    winner: null,
+                    date: d.date,
+                    stadium: d.stadium,
+                    roundIdx: 0,
+                    matchIdx: i
+                });
+            }
+
+            // -- Round of 16 (8 matches) --
+            for (let i = 0; i < 8; i++) {
+                rounds[1].matches.push({
+                    id: `r16_${i}`,
+                    home: null,
+                    away: null,
+                    winner: null,
+                    date: R16_SCHEDULE[i].date,
+                    stadium: R16_SCHEDULE[i].stadium,
+                    roundIdx: 1,
+                    matchIdx: i,
+                    sources: R16_SOURCES[i]
+                });
+            }
+
+            // -- Quarter-finals (4 matches) --
+            for (let i = 0; i < 4; i++) {
+                rounds[2].matches.push({
+                    id: `qf_${i}`,
+                    home: null,
+                    away: null,
+                    winner: null,
+                    date: QF_SCHEDULE[i].date,
+                    stadium: QF_SCHEDULE[i].stadium,
+                    roundIdx: 2,
+                    matchIdx: i,
+                    sources: QF_SOURCES[i]
+                });
+            }
+
+            // -- Semi-finals (2 matches) --
+            for (let i = 0; i < 2; i++) {
+                rounds[3].matches.push({
+                    id: `sf_${i}`,
+                    home: null,
+                    away: null,
+                    winner: null,
+                    date: SF_SCHEDULE[i].date,
+                    stadium: SF_SCHEDULE[i].stadium,
+                    roundIdx: 3,
+                    matchIdx: i,
+                    sources: SF_SOURCES[i]
+                });
+            }
+
+            // -- Third Place (1 match) --
+            rounds[4].matches.push({
+                id: 'third',
+                home: null,
+                away: null,
+                winner: null,
+                date: THIRD_PLACE.date,
+                stadium: THIRD_PLACE.stadium,
+                roundIdx: 4,
+                matchIdx: 0,
+                sources: null
+            });
+
+            // -- Final (1 match) --
+            rounds[5].matches.push({
+                id: 'final',
+                home: null,
+                away: null,
+                winner: null,
+                date: FINAL.date,
+                stadium: FINAL.stadium,
+                roundIdx: 5,
+                matchIdx: 0,
+                sources: null
+            });
+
+            return rounds;
+        }
+
+        // ================================================================
+        // 8. SAVE / LOAD state (localStorage)
+        // ================================================================
+        function saveState() {
+            try {
+                // We need to store only plain data; we'll remove circular refs
+                const data = JSON.stringify(tournament, (key, value) => {
+                    // Skip functions, keep objects
+                    return value;
+                });
+                localStorage.setItem('wc2026_bracket', data);
+            } catch (e) {
+                console.warn('Save failed', e);
+            }
+        }
+
+        function loadState() {
+            const stored = localStorage.getItem('wc2026_bracket');
+            if (!stored) return null;
+            try {
+                const parsed = JSON.parse(stored);
+                // Now we need to rebuild team references (home, away, winner) from TEAMS array
+                // We'll traverse and replace team objects by name
+                const rounds = parsed;
+                for (let r = 0; r < rounds.length; r++) {
+                    const round = rounds[r];
+                    for (let m = 0; m < round.matches.length; m++) {
+                        const match = round.matches[m];
+                        if (match.home && match.home.name) {
+                            match.home = getTeam(match.home.name);
+                        }
+                        if (match.away && match.away.name) {
+                            match.away = getTeam(match.away.name);
+                        }
+                        if (match.winner && match.winner.name) {
+                            match.winner = getTeam(match.winner.name);
+                        }
+                    }
+                }
+                return rounds;
+            } catch (e) {
+                console.warn('Load failed', e);
+                return null;
+            }
+        }
+
+        function resetState() {
+            localStorage.removeItem('wc2026_bracket');
+            tournament = buildTournament();
+            renderTournament();
+            saveState();
+        }
+
+        // ================================================================
+        // 9. RENDER
+        // ================================================================
+        function renderTournament() {
+            const container = document.getElementById('tournament');
+            container.innerHTML = '';
+
+            // We'll show rounds in order: R32, R16, QF, SF, 3rd, Final
+            // But we want left and right halves? Actually we display all rounds sequentially.
+            // For a cleaner look, we can separate into two halves, but for simplicity we keep horizontal.
+            // However, we can add a visual divider after SF? Not needed.
+
+            tournament.forEach((round, rIdx) => {
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'round';
+
+                const title = document.createElement('h2');
+                title.textContent = round.name;
+                roundDiv.appendChild(title);
+
+                round.matches.forEach((match, mIdx) => {
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'match';
+                    if (match.winner) matchDiv.classList.add('has-winner');
+
+                    // Home team (flag only)
+                    const homeDiv = document.createElement('div');
+                    homeDiv.className = 'team home';
+                    if (match.home) {
+                        homeDiv.textContent = match.home.flag;
+                        if (match.winner === match.home) homeDiv.classList.add('winner');
+                        else if (match.winner) homeDiv.classList.add('loser');
+                        if (!match.winner && match.home && match.away) {
+                            homeDiv.style.cursor = 'pointer';
+                            homeDiv.addEventListener('click', () => selectWinner(rIdx, mIdx, 'home'));
+                        }
+                    } else {
+                        homeDiv.textContent = '?';
+                        homeDiv.classList.add('tbd');
+                    }
+
+                    // Away team (flag only)
+                    const awayDiv = document.createElement('div');
+                    awayDiv.className = 'team away';
+                    if (match.away) {
+                        awayDiv.textContent = match.away.flag;
+                        if (match.winner === match.away) awayDiv.classList.add('winner');
+                        else if (match.winner) awayDiv.classList.add('loser');
+                        if (!match.winner && match.home && match.away) {
+                            awayDiv.style.cursor = 'pointer';
+                            awayDiv.addEventListener('click', () => selectWinner(rIdx, mIdx, 'away'));
+                        }
+                    } else {
+                        awayDiv.textContent = '?';
+                        awayDiv.classList.add('tbd');
+                    }
+
+                    // Info line (date & stadium) – small
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'match-info';
+                    infoDiv.textContent = `${match.date} | ${match.stadium}`;
+
+                    matchDiv.appendChild(homeDiv);
+                    matchDiv.appendChild(awayDiv);
+                    matchDiv.appendChild(infoDiv);
+                    roundDiv.appendChild(matchDiv);
+                });
+
+                container.appendChild(roundDiv);
+            });
+
+            // After render, save state (if not already saved on each selection)
+            // But we save after each selection, so this is just extra.
+        }
+
+        // ================================================================
+        // 10. SELECT WINNER & PROPAGATE
+        // ================================================================
+        function selectWinner(roundIdx, matchIdx, side) {
+            const match = tournament[roundIdx].matches[matchIdx];
+            if (match.winner) return;
+
+            const winner = side === 'home' ? match.home : match.away;
+            if (!winner) return;
+
+            match.winner = winner;
+
+            // --- Propagate to next round ---
+            if (roundIdx === 0) {
+                // R32 -> R16
+                const r16 = tournament[1];
+                for (let i = 0; i < r16.matches.length; i++) {
+                    const m = r16.matches[i];
+                    if (!m.sources) continue;
+                    if (m.sources[0] === matchIdx) m.home = winner;
+                    if (m.sources[1] === matchIdx) m.away = winner;
+                }
+            } else if (roundIdx === 1) {
+                // R16 -> QF
+                const qf = tournament[2];
+                for (let i = 0; i < qf.matches.length; i++) {
+                    const m = qf.matches[i];
+                    if (!m.sources) continue;
+                    if (m.sources[0] === matchIdx) m.home = winner;
+                    if (m.sources[1] === matchIdx) m.away = winner;
+                }
+            } else if (roundIdx === 2) {
+                // QF -> SF
+                const sf = tournament[3];
+                for (let i = 0; i < sf.matches.length; i++) {
+                    const m = sf.matches[i];
+                    if (!m.sources) continue;
+                    if (m.sources[0] === matchIdx) m.home = winner;
+                    if (m.sources[1] === matchIdx) m.away = winner;
+                }
+            } else if (roundIdx === 3) {
+                // SF -> Final & Third Place
+                const finalMatch = tournament[5].matches[0];
+                const thirdMatch = tournament[4].matches[0];
+
+                if (matchIdx === 0) {
+                    finalMatch.home = winner;
+                    const loser = side === 'home' ? match.away : match.home;
+                    thirdMatch.home = loser;
+                } else {
+                    finalMatch.away = winner;
+                    const loser = side === 'home' ? match.away : match.home;
+                    thirdMatch.away = loser;
+                }
+            } else if (roundIdx === 4) {
+                // Third Place finished
+                setTimeout(() => {
+                    alert(`🥉 Third Place: ${winner.flag} ${winner.name} 🥉`);
+                }, 100);
+            } else if (roundIdx === 5) {
+                // Final finished
+                setTimeout(() => {
+                    alert(`🏆 Champion: ${winner.flag} ${winner.name} 🏆`);
+                }, 100);
+            }
+
+            renderTournament();
+            saveState(); // Auto-save after each selection
+        }
+
+        // ================================================================
+        // 11. THEME TOGGLE
+        // ================================================================
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('light');
+            this.textContent = document.body.classList.contains('light') ? 'Dark Mode' : 'Light Mode';
+        });
+
+        // ================================================================
+        // 12. INIT – try load from localStorage, else build fresh
+        // ================================================================
+        const saved = loadState();
+        if (saved) {
+            tournament = saved;
+        } else {
+            tournament = buildTournament();
+        }
+        renderTournament();
+
+        // Reset button
+        document.getElementById('reset-button').addEventListener('click', function() {
+            if (confirm('Reset all progress?')) {
+                resetState();
+            }
+        });
+
+        // Service Worker registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker registered'))
+                .catch(err => console.warn('SW registration failed:', err));
+        }
+    </script>
+</body>
+</html>
