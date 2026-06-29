@@ -253,7 +253,7 @@
 
     <script>
         // ================================================================
-        // 1. チームデータ（国旗）
+        // 1. チームデータ（ユーザー指定の配列）
         // ================================================================
         const TEAMS = [
             // 左の山（16チーム）
@@ -268,11 +268,11 @@
             { name: 'Portugal', flag: '🇵🇹' },
             { name: 'Croatia', flag: '🇭🇷' },
             { name: 'Spain', flag: '🇪🇸' },
+            { name: 'Austria', flag: '🇦🇹' },
             { name: 'USA', flag: '🇺🇸' },
             { name: 'Bosnia and Herzegovina', flag: '🇧🇦' },
             { name: 'Belgium', flag: '🇧🇪' },
             { name: 'Senegal', flag: '🇸🇳' },
-            { name: 'Switzerland', flag: '🇨🇭' },
             // 右の山（16チーム）
             { name: 'Brazil', flag: '🇧🇷' },
             { name: 'Japan', flag: '🇯🇵' },
@@ -286,64 +286,57 @@
             { name: 'Cape Verde', flag: '🇨🇻' },
             { name: 'Australia', flag: '🇦🇺' },
             { name: 'Egypt', flag: '🇪🇬' },
+            { name: 'Switzerland', flag: '🇨🇭' },
             { name: 'Algeria', flag: '🇩🇿' },
             { name: 'Colombia', flag: '🇨🇴' },
-            { name: 'Ghana', flag: '🇬🇭' },
-            { name: 'Austria', flag: '🇦🇹' }
+            { name: 'Ghana', flag: '🇬🇭' }
         ];
-        function getTeam(name) { return TEAMS.find(t => t.name === name); }
+
+        function getTeam(name) {
+            return TEAMS.find(t => t.name === name);
+        }
 
         // ================================================================
-        // 2. ラウンド32の対戦カード（左の山 → 右の山）
+        // 2. ラウンド32 対戦カード（左・右それぞれ隣り合わせ）
         // ================================================================
-        // 左の山の16チーム（インデックス 0〜15）
         const LEFT_TEAMS = TEAMS.slice(0, 16);
-        // 右の山の16チーム（インデックス 16〜31）
         const RIGHT_TEAMS = TEAMS.slice(16, 32);
 
-        // 左の山の対戦（8試合）
-        const LEFT_R32 = [
-            { home: 'Germany', away: 'Paraguay' },
-            { home: 'France', away: 'Sweden' },
-            { home: 'South Africa', away: 'Canada' },
-            { home: 'Netherlands', away: 'Morocco' },
-            { home: 'Portugal', away: 'Croatia' },
-            { home: 'Spain', away: 'USA' },
-            { home: 'Bosnia and Herzegovina', away: 'Belgium' },
-            { home: 'Senegal', away: 'Switzerland' }
-        ];
+        // 左の山（8試合）：0-1, 2-3, 4-5, 6-7, 8-9, 10-11, 12-13, 14-15
+        const LEFT_R32 = [];
+        for (let i = 0; i < 16; i += 2) {
+            LEFT_R32.push({
+                home: LEFT_TEAMS[i].name,
+                away: LEFT_TEAMS[i + 1].name
+            });
+        }
 
-        // 右の山の対戦（8試合）
-        const RIGHT_R32 = [
-            { home: 'Brazil', away: 'Japan' },
-            { home: 'Ivory Coast', away: 'Norway' },
-            { home: 'Mexico', away: 'Ecuador' },
-            { home: 'England', away: 'DR Congo' },
-            { home: 'Argentina', away: 'Cape Verde' },
-            { home: 'Australia', away: 'Egypt' },
-            { home: 'Algeria', away: 'Colombia' },
-            { home: 'Ghana', away: 'Austria' }
-        ];
+        // 右の山（8試合）
+        const RIGHT_R32 = [];
+        for (let i = 0; i < 16; i += 2) {
+            RIGHT_R32.push({
+                home: RIGHT_TEAMS[i].name,
+                away: RIGHT_TEAMS[i + 1].name
+            });
+        }
 
-        // 全R32データ（左→右の順）
         const R32_DATA = LEFT_R32.concat(RIGHT_R32);
 
         // ================================================================
-        // 3. ラウンド16以降のソース（インデックスはR32_DATAの順）
+        // 3. ラウンド16以降の自然なブラケット（隣り合わせ）
         // ================================================================
-        // R32_DATAのインデックス
-        // 左: 0-7, 右: 8-15
+        // R32インデックス: 左0-7, 右8-15
+        // R16: 左4試合 (0-3), 右4試合 (4-7)
         const R16_SOURCES = [
-            [0, 2], // 左: 試合0 vs 試合2
-            [1, 4], // 左: 試合1 vs 試合4
-            [3, 5], // 左: 試合3 vs 試合5
-            [6, 7], // 左: 試合6 vs 試合7
-            [8, 10], // 右: 試合8 vs 試合10
-            [9, 11], // 右: 試合9 vs 試合11
-            [12, 14], // 右: 試合12 vs 試合14
-            [13, 15] // 右: 試合13 vs 試合15
+            [0, 1],
+            [2, 3],
+            [4, 5],
+            [6, 7],
+            [8, 9],
+            [10, 11],
+            [12, 13],
+            [14, 15]
         ];
-
         const R16_SCHEDULE = [
             { date: 'Jul 4, 1:00 PM', stadium: 'Gillette Stadium, Foxborough' },
             { date: 'Jul 4, 5:00 PM', stadium: 'MetLife Stadium, East Rutherford' },
@@ -355,12 +348,12 @@
             { date: 'Jul 7, 4:00 PM', stadium: 'Estadio Azteca, Mexico City' }
         ];
 
-        // QF
+        // QF: 左2試合 (0-1), 右2試合 (2-3)
         const QF_SOURCES = [
-            [0, 1], // 左
-            [4, 5], // 右
-            [2, 3], // 左
-            [6, 7] // 右
+            [0, 1],
+            [2, 3],
+            [4, 5],
+            [6, 7]
         ];
         const QF_SCHEDULE = [
             { date: 'Jul 9, 4:00 PM', stadium: 'Gillette Stadium, Foxborough' },
@@ -369,10 +362,10 @@
             { date: 'Jul 11, 9:00 PM', stadium: 'NRG Stadium, Houston' }
         ];
 
-        // SF
+        // SF: 左1試合 (0), 右1試合 (1)
         const SF_SOURCES = [
-            [0, 1], // 左の準決勝
-            [2, 3] // 右の準決勝
+            [0, 1],
+            [2, 3]
         ];
         const SF_SCHEDULE = [
             { date: 'Jul 14, 3:00 PM', stadium: 'AT&T Stadium, Arlington' },
@@ -383,7 +376,7 @@
         const FINAL = { date: 'Jul 19, 3:00 PM', stadium: 'MetLife Stadium, East Rutherford' };
 
         // ================================================================
-        // 4. トーナメント状態の構築
+        // 4. トーナメント状態構築
         // ================================================================
         let tournament = null;
 
@@ -396,6 +389,7 @@
                 { name: '3rd', matches: [] },
                 { name: 'Final', matches: [] }
             ];
+
             // R32
             for (let i = 0; i < R32_DATA.length; i++) {
                 const d = R32_DATA[i];
@@ -404,17 +398,20 @@
                     home: getTeam(d.home),
                     away: getTeam(d.away),
                     winner: null,
-                    date: `Jun ${28 + Math.floor(i/2)}, ${(i%2===0)?'1:00 PM':'4:30 PM'}`,
+                    date: `Jun ${28 + Math.floor(i / 2)}`, // 簡易日付
                     stadium: 'TBD',
                     roundIdx: 0,
                     matchIdx: i
                 });
             }
+
             // R16
             for (let i = 0; i < 8; i++) {
                 rounds[1].matches.push({
                     id: `r16_${i}`,
-                    home: null, away: null, winner: null,
+                    home: null,
+                    away: null,
+                    winner: null,
                     date: R16_SCHEDULE[i].date,
                     stadium: R16_SCHEDULE[i].stadium,
                     roundIdx: 1,
@@ -422,11 +419,14 @@
                     sources: R16_SOURCES[i]
                 });
             }
+
             // QF
             for (let i = 0; i < 4; i++) {
                 rounds[2].matches.push({
                     id: `qf_${i}`,
-                    home: null, away: null, winner: null,
+                    home: null,
+                    away: null,
+                    winner: null,
                     date: QF_SCHEDULE[i].date,
                     stadium: QF_SCHEDULE[i].stadium,
                     roundIdx: 2,
@@ -434,11 +434,14 @@
                     sources: QF_SOURCES[i]
                 });
             }
+
             // SF
             for (let i = 0; i < 2; i++) {
                 rounds[3].matches.push({
                     id: `sf_${i}`,
-                    home: null, away: null, winner: null,
+                    home: null,
+                    away: null,
+                    winner: null,
                     date: SF_SCHEDULE[i].date,
                     stadium: SF_SCHEDULE[i].stadium,
                     roundIdx: 3,
@@ -446,26 +449,33 @@
                     sources: SF_SOURCES[i]
                 });
             }
+
             // 3rd
             rounds[4].matches.push({
                 id: 'third',
-                home: null, away: null, winner: null,
+                home: null,
+                away: null,
+                winner: null,
                 date: THIRD_PLACE.date,
                 stadium: THIRD_PLACE.stadium,
                 roundIdx: 4,
                 matchIdx: 0,
                 sources: null
             });
+
             // Final
             rounds[5].matches.push({
                 id: 'final',
-                home: null, away: null, winner: null,
+                home: null,
+                away: null,
+                winner: null,
                 date: FINAL.date,
                 stadium: FINAL.stadium,
                 roundIdx: 5,
                 matchIdx: 0,
                 sources: null
             });
+
             return rounds;
         }
 
@@ -473,7 +483,9 @@
         // 5. 保存／復元
         // ================================================================
         function saveState() {
-            try { localStorage.setItem('wc2026_bracket', JSON.stringify(tournament)); } catch (e) {}
+            try {
+                localStorage.setItem('wc2026_bracket', JSON.stringify(tournament));
+            } catch (e) {}
         }
 
         function loadState() {
@@ -490,7 +502,9 @@
                     }
                 }
                 return parsed;
-            } catch (e) { return null; }
+            } catch (e) {
+                return null;
+            }
         }
 
         function resetState() {
@@ -582,31 +596,35 @@
                 return col;
             }
 
-            // 左側
+            // ---- 左側（外→内） ----
             container.appendChild(buildColumn('R32', leftR32));
             container.appendChild(buildColumn('R16', leftR16));
             container.appendChild(buildColumn('QF', leftQF));
             container.appendChild(buildColumn('SF', leftSF));
 
-            // 中央
+            // ---- 中央（Final / 3rd） ----
             const center = document.createElement('div');
             center.className = 'center-divider';
+
             const finalCol = buildColumn('Final', [final]);
             finalCol.style.background = 'rgba(255,215,0,0.08)';
             finalCol.style.border = '1px solid rgba(255,215,0,0.3)';
             finalCol.style.borderRadius = '8px';
             center.appendChild(finalCol);
+
             const spacer = document.createElement('div');
             spacer.style.height = '0.8rem';
             center.appendChild(spacer);
+
             const thirdCol = buildColumn('3rd', [third]);
             thirdCol.style.background = 'rgba(192,192,192,0.06)';
             thirdCol.style.border = '1px solid rgba(192,192,192,0.2)';
             thirdCol.style.borderRadius = '8px';
             center.appendChild(thirdCol);
+
             container.appendChild(center);
 
-            // 右側
+            // ---- 右側（内→外） ----
             container.appendChild(buildColumn('SF', rightSF));
             container.appendChild(buildColumn('QF', rightQF));
             container.appendChild(buildColumn('R16', rightR16));
