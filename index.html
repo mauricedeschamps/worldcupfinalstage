@@ -8,7 +8,11 @@
     <link rel="apple-touch-icon" href="icons/icon-192.jpg">
     <meta name="theme-color" content="#1a1a2e">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: #1a1a2e;
@@ -18,8 +22,13 @@
             display: flex;
             flex-direction: column;
         }
-        body.light { background: #f0f0f0; color: #222; }
-        header, footer {
+        body.light {
+            background: #f0f0f0;
+            color: #222;
+        }
+
+        header,
+        footer {
             padding: 0.6rem 1rem;
             background: #16213e;
             display: flex;
@@ -29,12 +38,22 @@
             gap: 0.5rem;
             flex-shrink: 0;
         }
-        body.light header, body.light footer { background: #ddd; }
-        header h1 { font-size: 1.2rem; font-weight: 600; }
-        .header-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        body.light header,
+        body.light footer {
+            background: #ddd;
+        }
+        header h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
         .header-actions button {
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.25);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             color: #eee;
             padding: 0.3rem 0.8rem;
             border-radius: 2rem;
@@ -44,115 +63,187 @@
             white-space: nowrap;
         }
         body.light .header-actions button {
-            background: rgba(0,0,0,0.08);
-            border-color: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.08);
+            border-color: rgba(0, 0, 0, 0.2);
             color: #222;
         }
-        .header-actions button:hover { background: rgba(255,255,255,0.25); }
-        body.light .header-actions button:hover { background: rgba(0,0,0,0.15); }
-        #reset-button { border-color: #ff6b6b !important; color: #ff6b6b !important; }
-        body.light #reset-button { border-color: #d63031 !important; color: #d63031 !important; }
-        #reset-button:hover { background: rgba(255,107,107,0.2) !important; }
+        .header-actions button:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        body.light .header-actions button:hover {
+            background: rgba(0, 0, 0, 0.15);
+        }
+        #reset-button {
+            border-color: #ff6b6b !important;
+            color: #ff6b6b !important;
+        }
+        body.light #reset-button {
+            border-color: #d63031 !important;
+            color: #d63031 !important;
+        }
+        #reset-button:hover {
+            background: rgba(255, 107, 107, 0.2) !important;
+        }
 
-        footer { margin-top: auto; justify-content: center; text-align: center; font-size: 0.8rem; }
-        footer a { color: #4fc3f7; text-decoration: none; }
-        body.light footer a { color: #0277bd; }
-        footer a:hover { text-decoration: underline; }
+        footer {
+            margin-top: auto;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        footer a {
+            color: #4fc3f7;
+            text-decoration: none;
+        }
+        body.light footer a {
+            color: #0277bd;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
 
+        /* ----- Tournament Bracket ----- */
         #tournament {
             display: flex;
             overflow-x: auto;
             padding: 1rem 0.5rem;
-            gap: 0.6rem;
+            gap: 0.8rem;
             flex: 1;
             align-items: center;
-            background: rgba(0,0,0,0.15);
+            background: rgba(0, 0, 0, 0.15);
+            justify-content: center;
         }
-        body.light #tournament { background: rgba(0,0,0,0.02); }
+        body.light #tournament {
+            background: rgba(0, 0, 0, 0.02);
+        }
 
         .round-column {
             display: flex;
             flex-direction: column;
-            gap: 0.4rem;
+            gap: 0.6rem;
             flex-shrink: 0;
-            background: rgba(255,255,255,0.04);
-            border-radius: 6px;
-            padding: 0.4rem 0.2rem;
-            min-width: 56px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 0.5rem 0.3rem;
+            min-width: 70px;
             align-items: center;
         }
-        body.light .round-column { background: rgba(0,0,0,0.03); }
+        body.light .round-column {
+            background: rgba(0, 0, 0, 0.03);
+        }
         .round-column .round-label {
-            font-size: 0.55rem;
-            font-weight: 600;
+            font-size: 0.6rem;
+            font-weight: 700;
             text-transform: uppercase;
             opacity: 0.6;
-            letter-spacing: 0.3px;
-            margin-bottom: 0.2rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
             white-space: nowrap;
         }
+
         .match {
-            background: rgba(255,255,255,0.06);
-            border-radius: 4px;
-            padding: 0.15rem 0.1rem;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            padding: 0.2rem 0.15rem;
             display: flex;
             flex-direction: column;
-            gap: 0.05rem;
+            gap: 0.1rem;
             width: 100%;
-            min-width: 40px;
-            border-left: 2px solid transparent;
+            min-width: 55px;
+            border-left: 3px solid transparent;
             transition: border-color 0.2s;
         }
-        body.light .match { background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
-        .match.has-winner { border-left-color: #ffd700; }
+        body.light .match {
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+        .match.has-winner {
+            border-left-color: #ffd700;
+        }
+
+        /* ----- 国旗サイズを大きく（スマホ対応） ----- */
         .team {
-            padding: 0.05rem 0.1rem;
-            border-radius: 3px;
+            padding: 0.1rem 0.2rem;
+            border-radius: 4px;
             cursor: default;
-            font-size: 1.2rem;
+            font-size: 2rem;
+            /* ← 大きく */
             text-align: center;
-            line-height: 1.6rem;
-            min-height: 1.6rem;
+            line-height: 2.4rem;
+            min-height: 2.4rem;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: background 0.15s, opacity 0.2s, transform 0.15s;
         }
         .team:not(.winner):not(.loser):hover {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.2);
             cursor: pointer;
         }
-        body.light .team:not(.winner):not(.loser):hover { background: rgba(0,0,0,0.06); }
+        body.light .team:not(.winner):not(.loser):hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
         .team.winner {
             background: #ffd700;
-            border-radius: 4px;
-            box-shadow: 0 0 6px rgba(255,215,0,0.5);
-            transform: scale(1.05);
+            border-radius: 6px;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+            transform: scale(1.1);
         }
-        .team.loser { opacity: 0.25; filter: grayscale(0.8); }
-        .team.tbd { opacity: 0.3; font-size: 0.8rem; color: #aaa; }
+        .team.loser {
+            opacity: 0.25;
+            filter: grayscale(0.8);
+        }
+        .team.tbd {
+            opacity: 0.3;
+            font-size: 1rem;
+            color: #aaa;
+        }
+
         .match-info {
-            font-size: 0.4rem;
+            font-size: 0.45rem;
             text-align: center;
-            opacity: 0.35;
+            opacity: 0.4;
             white-space: nowrap;
             margin-top: 0.05rem;
         }
+
         .center-divider {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.6rem;
-            padding: 0 0.2rem;
+            gap: 0.8rem;
+            padding: 0 0.3rem;
         }
-        .center-divider .final-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; opacity: 0.6; letter-spacing: 1px; }
+        .center-divider .final-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
 
+        /* スマホ向け調整 */
         @media (max-width: 700px) {
-            .team { font-size: 1rem; line-height: 1.3rem; min-height: 1.3rem; }
-            .round-column { min-width: 40px; padding: 0.2rem 0.1rem; }
-            .match { min-width: 30px; padding: 0.1rem 0.05rem; }
-            .match-info { font-size: 0.35rem; }
-            .round-column .round-label { font-size: 0.45rem; }
+            .team {
+                font-size: 1.6rem;
+                line-height: 2rem;
+                min-height: 2rem;
+            }
+            .round-column {
+                min-width: 55px;
+                padding: 0.3rem 0.15rem;
+                gap: 0.4rem;
+            }
+            .match {
+                min-width: 45px;
+                padding: 0.15rem 0.1rem;
+            }
+            .match-info {
+                font-size: 0.4rem;
+            }
+            .round-column .round-label {
+                font-size: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -213,7 +304,7 @@
         function getTeam(name) { return TEAMS.find(t => t.name === name); }
 
         // ================================================================
-        // 2. TOURNAMENT DATA
+        // 2. TOURNAMENT DATA (same as before)
         // ================================================================
         const R32_DATA = [
             { home: 'South Africa', away: 'Canada', date: 'Jun 28, 3:00 PM', stadium: 'SoFi Stadium, Los Angeles' },
@@ -355,9 +446,9 @@
         // 4. SAVE / LOAD
         // ================================================================
         function saveState() {
-            try { localStorage.setItem('wc2026_bracket', JSON.stringify(tournament)); }
-            catch(e) { console.warn('Save failed', e); }
+            try { localStorage.setItem('wc2026_bracket', JSON.stringify(tournament)); } catch (e) { console.warn('Save failed', e); }
         }
+
         function loadState() {
             const stored = localStorage.getItem('wc2026_bracket');
             if (!stored) return null;
@@ -372,8 +463,9 @@
                     }
                 }
                 return parsed;
-            } catch(e) { console.warn('Load failed', e); return null; }
+            } catch (e) { console.warn('Load failed', e); return null; }
         }
+
         function resetState() {
             localStorage.removeItem('wc2026_bracket');
             tournament = buildTournament();
@@ -382,13 +474,32 @@
         }
 
         // ================================================================
-        // 5. RENDER – LEFT HALF | CENTER | RIGHT HALF
+        // 5. RENDER – 左右対称のトーナメント表
         // ================================================================
         function renderTournament() {
             const container = document.getElementById('tournament');
             container.innerHTML = '';
 
-            // Helper: build a column from an array of matches
+            const r32 = tournament[0].matches;
+            const r16 = tournament[1].matches;
+            const qf = tournament[2].matches;
+            const sf = tournament[3].matches;
+            const third = tournament[4].matches[0];
+            const final = tournament[5].matches[0];
+
+            // 左半分 (インデックス0〜7)
+            const leftR32 = r32.slice(0, 8);
+            const leftR16 = r16.slice(0, 4);
+            const leftQF = qf.slice(0, 2);
+            const leftSF = sf.slice(0, 1);
+
+            // 右半分 (インデックス8〜15)
+            const rightR32 = r32.slice(8, 16);
+            const rightR16 = r16.slice(4, 8);
+            const rightQF = qf.slice(2, 4);
+            const rightSF = sf.slice(1, 2);
+
+            // 列生成ヘルパー
             function buildColumn(label, matches, extraStyle = '') {
                 const col = document.createElement('div');
                 col.className = 'round-column';
@@ -444,60 +555,41 @@
                 return col;
             }
 
-            const r32 = tournament[0].matches;
-            const r16 = tournament[1].matches;
-            const qf  = tournament[2].matches;
-            const sf  = tournament[3].matches;
-            const third = tournament[4].matches[0];
-            const final = tournament[5].matches[0];
-
-            // Split each round into left and right halves
-            const leftR32 = r32.slice(0, 8);
-            const leftR16 = r16.slice(0, 4);
-            const leftQF  = qf.slice(0, 2);
-            const leftSF  = sf.slice(0, 1);
-
-            const rightR32 = r32.slice(8, 16);
-            const rightR16 = r16.slice(4, 8);
-            const rightQF  = qf.slice(2, 4);
-            const rightSF  = sf.slice(1, 2);
-
-            // --- LEFT SIDE (outer → inner) ---
+            // ---- 左側: 外側 → 内側 (R32 → R16 → QF → SF) ----
             container.appendChild(buildColumn('R32', leftR32));
             container.appendChild(buildColumn('R16', leftR16));
             container.appendChild(buildColumn('QF', leftQF));
             container.appendChild(buildColumn('SF', leftSF));
 
-            // --- CENTER (Final & Third) ---
+            // ---- 中央: Final（上）と 3rd（下） ----
             const center = document.createElement('div');
             center.className = 'center-divider';
-            // Final
+
             const finalCol = buildColumn('Final', [final]);
             finalCol.style.background = 'rgba(255,215,0,0.08)';
             finalCol.style.border = '1px solid rgba(255,215,0,0.3)';
             finalCol.style.borderRadius = '8px';
-            finalCol.style.padding = '0.4rem 0.3rem';
+            finalCol.style.padding = '0.5rem 0.3rem';
             center.appendChild(finalCol);
-            // spacer
-            const sp = document.createElement('div');
-            sp.style.height = '0.6rem';
-            center.appendChild(sp);
-            // Third
+
+            const spacer = document.createElement('div');
+            spacer.style.height = '0.8rem';
+            center.appendChild(spacer);
+
             const thirdCol = buildColumn('3rd', [third]);
             thirdCol.style.background = 'rgba(192,192,192,0.06)';
             thirdCol.style.border = '1px solid rgba(192,192,192,0.2)';
             thirdCol.style.borderRadius = '8px';
-            thirdCol.style.padding = '0.4rem 0.3rem';
+            thirdCol.style.padding = '0.5rem 0.3rem';
             center.appendChild(thirdCol);
+
             container.appendChild(center);
 
-            // --- RIGHT SIDE (inner → outer) ---
+            // ---- 右側: 内側 → 外側 (SF → QF → R16 → R32) ----
             container.appendChild(buildColumn('SF', rightSF));
             container.appendChild(buildColumn('QF', rightQF));
             container.appendChild(buildColumn('R16', rightR16));
             container.appendChild(buildColumn('R32', rightR32));
-
-            // After render, save if not already saved (but we save after each selection)
         }
 
         // ================================================================
@@ -513,7 +605,6 @@
             match.winner = winner;
 
             if (roundIdx === 0) {
-                // R32 → R16
                 const r16 = tournament[1];
                 for (let i = 0; i < r16.matches.length; i++) {
                     const m = r16.matches[i];
@@ -522,7 +613,6 @@
                     if (m.sources[1] === matchIdx) m.away = winner;
                 }
             } else if (roundIdx === 1) {
-                // R16 → QF
                 const qf = tournament[2];
                 for (let i = 0; i < qf.matches.length; i++) {
                     const m = qf.matches[i];
@@ -531,7 +621,6 @@
                     if (m.sources[1] === matchIdx) m.away = winner;
                 }
             } else if (roundIdx === 2) {
-                // QF → SF
                 const sf = tournament[3];
                 for (let i = 0; i < sf.matches.length; i++) {
                     const m = sf.matches[i];
@@ -540,7 +629,6 @@
                     if (m.sources[1] === matchIdx) m.away = winner;
                 }
             } else if (roundIdx === 3) {
-                // SF → Final & Third
                 const finalMatch = tournament[5].matches[0];
                 const thirdMatch = tournament[4].matches[0];
                 if (matchIdx === 0) {
